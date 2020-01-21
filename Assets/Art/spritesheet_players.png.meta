@@ -1,0 +1,141 @@
+fileFormatVersion: 2
+guid: dad77219a6b98ea4ab8dd0ce46163167
+timeCreated: 1451842741
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: spritesheet_players_0
+    21300002: spritesheet_players_1
+    21300004: spritesheet_players_2
+    21300006: spritesheet_players_3
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 128
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: spritesheet_players_0
+      rect:
+        serializedVersion: 2
+        x: 651
+        y: 1792
+        width: 104
+        height: 150
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -52, y: 150}
+        - {x: -52, y: 0}
+        - {x: 43, y: 0}
+        - {x: 52, y: 10}
+        - {x: 52, y: 132}
+        - {x: 30, y: 150}
+    - name: spritesheet_players_1
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 1536
+        width: 112
+        height: 156
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -56, y: 156}
+        - {x: -56, y: 29}
+        - {x: -47, y: 0}
+        - {x: 55, y: 0}
+        - {x: 56, y: 2}
+        - {x: 56, y: 156}
+    - name: spritesheet_players_2
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1279
+        width: 108
+        height: 154
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -44, y: 154}
+        - {x: -54, y: 143}
+        - {x: -54, y: 34}
+        - {x: -52, y: 32}
+        - {x: -41, y: 39}
+        - {x: -39, y: 0}
+        - {x: 43, y: 0}
+        - {x: 54, y: 26}
+        - {x: 54, y: 149}
+        - {x: 35, y: 154}
+    - name: spritesheet_players_3
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 256
+        width: 108
+        height: 153
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 54, y: 120}
+        - {x: 32, y: 152}
+        - {x: 28, y: 153}
+        - {x: -33, y: 153}
+        - {x: -54, y: 127}
+        - {x: -54, y: 33}
+        - {x: -45, y: 29}
+        - {x: -42, y: 33}
+        - {x: -41, y: 36}
+        - {x: -39, y: 32}
+        - {x: -40, y: 0}
+        - {x: 42, y: 0}
+        - {x: 44, y: 12}
+        - {x: 54, y: 33}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
