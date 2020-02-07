@@ -44,9 +44,11 @@ public class PlatformGenerator : MonoBehaviour
     {
 	    if(transform.position.x < generationPoint.position.x)
         {
-            distanceBetween = Random.Range(distanceBetweenMin, distanceBetweenMax);
+            //distanceBetween = Random.Range(distanceBetweenMin, distanceBetweenMax);
+            distanceBetween = 2; 
 
-            platformSelector = Random.Range(0, objectPools.Length);
+            //platformSelector = Random.Range(0, objectPools.Length);
+            platformSelector = 1; 
 
             heightChange = transform.position.y + Random.Range(maxHeightChange, -maxHeightChange);
 
