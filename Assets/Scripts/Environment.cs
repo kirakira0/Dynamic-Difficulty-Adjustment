@@ -9,27 +9,13 @@ public class Environment : MonoBehaviour
     public GameObject player; 
     public GameObject platformGenerationPoint; 
 
-    private float nextActionTime = 0.0f;
-    public float period = 0.5f;
-
-    // public Vector3 low; 
-    // public Vector3 mid; 
-    // public Vector3 high; 
-
-    public int high = 3; 
-    public int mid = 0; 
-    public int low = -3;  
+    // private float nextActionTime = 0.0f;
+    // public float period = 0.5f;
+ 
 
     public GameObject shortPlatform;
     public GameObject mediumPlatform; 
     public GameObject longPlatform;  
-    
-    private int i = 0; 
-    private int height; 
-
-    private List<GameObject> type = new List<GameObject>(); 
-    //private List<Vector3> position = new List<Vector3>(); 
-    private List<int> position = new List<int>(); 
 
 
     // Start is called before the first frame update
