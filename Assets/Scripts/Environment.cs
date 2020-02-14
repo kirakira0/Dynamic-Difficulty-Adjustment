@@ -17,6 +17,8 @@ public class Environment : MonoBehaviour
     public GameObject mediumPlatform; 
     public GameObject longPlatform;  
 
+    public string test = "success"; 
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +27,7 @@ public class Environment : MonoBehaviour
         mediumPlatform = platforms[1];
         longPlatform = platforms[2]; 
 
-        Generate("short", "mid"); 
+        //Generate("short", "mid"); 
  
         //InvokeRepeating("RepeatedGeneration", 1.0f, 1.0f);
 
@@ -47,7 +49,7 @@ public class Environment : MonoBehaviour
 
     // }
 
-    void Generate(string platform, string height) {
+    public void Generate(string platform, string height) {
         int ypos = 0; 
         if (height == "low") {
             ypos = -3; 
