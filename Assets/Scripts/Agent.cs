@@ -9,7 +9,8 @@ public class Agent : MonoBehaviour
     void Start()
     {
         Debug.Log(Environment.test); 
-        InvokeRepeating("RepeatCallToEnv", 1.0f, 1.0f);
+        InvokeRepeating("RepeatCallToEnv", 1.0f, 2f);
+        //acclimation --> don't even awtich before a minimum number of iterations, stable coing collection percetage 
     }
 
     // Update is called once per frame
@@ -19,6 +20,6 @@ public class Agent : MonoBehaviour
     }
 
     void RepeatCallToEnv() {
-        Environment.Generate("short", "mid"); 
+        Environment.Generate("m", "mid"); 
     }
 }

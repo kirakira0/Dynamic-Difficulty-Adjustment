@@ -61,13 +61,13 @@ public class Environment : MonoBehaviour
             ypos = 0; 
         }
         GameObject type = shortPlatform; 
-        if (platform == "short") {
+        if (platform == "s") {
             type = shortPlatform; 
         }
-        else if (platform == "medium") {
+        else if (platform == "m") {
             type = mediumPlatform;
         }
-        else if (platform == "long") {
+        else if (platform == "l") {
             type = longPlatform; 
         }
         Instantiate(type, new Vector3(platformGenerationPoint.transform.position.x, ypos, 0), Quaternion.identity);
