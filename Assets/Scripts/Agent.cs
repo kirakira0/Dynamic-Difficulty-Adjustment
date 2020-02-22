@@ -5,6 +5,8 @@ using UnityEngine;
 public class Agent : MonoBehaviour
 {
     public Environment Environment; 
+    public CoinGenerator CoinGenerator;
+    Vector3 v = new Vector3(0, 0, 1);
     // Start is called before the first frame update
     void Start()
     {
@@ -20,5 +22,6 @@ public class Agent : MonoBehaviour
 
     void RepeatCallToEnv() {
         Environment.Generate("short", "mid"); 
+        //CoinGenerator.SpawnCoins(v);
     }
 }
