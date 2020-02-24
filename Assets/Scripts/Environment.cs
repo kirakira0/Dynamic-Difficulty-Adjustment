@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Environment : MonoBehaviour
 {
     //public ObjectPooler[] platformPool; 
@@ -49,28 +50,30 @@ public class Environment : MonoBehaviour
 
     // }
 
-    public void Generate(string platform, string height) {
-        int ypos = 0; 
-        if (height == "low") {
-            ypos = -3; 
-        }
-        else if (height == "high") {
-            ypos = 3; 
-        }
-        else if (height == "mid") {
-            ypos = 0; 
-        }
+    public void Generate(int index, List<string> sequence) {
         GameObject type = shortPlatform; 
-        if (platform == "s") {
+        int ypos = 0;
+        if (sequence[index] == "small") {
             type = shortPlatform; 
         }
-        else if (platform == "m") {
+        else if (sequence[index] == "medium") {
             type = mediumPlatform;
         }
-        else if (platform == "l") {
+        else if (sequence[index] == "large") {
             type = longPlatform; 
+        } 
+        if (sequence[index + 1] == "low") {
+            ypos = -3; 
         }
+        else if (sequence[index + 1] == "high") {
+            ypos = 3; 
+        }
+        else if (sequence[index + 1] == "mid") {
+            ypos = 0; 
+        }
+        
         Instantiate(type, new Vector3(platformGenerationPoint.transform.position.x, ypos, 0), Quaternion.identity);
+
     }
 
 }
