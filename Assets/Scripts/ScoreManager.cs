@@ -10,8 +10,6 @@ public class ScoreManager : MonoBehaviour
     public float scoreCount;
     public float highScoreCount;
 
-    public float pointsPerSecond;
-
     public bool scoreIncreasing;
 
 	// Use this for initialization
@@ -26,11 +24,6 @@ public class ScoreManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-        if (scoreIncreasing)
-        {
-            scoreCount += pointsPerSecond * Time.deltaTime;
-        }
-
         if(scoreCount > highScoreCount)
         {
             highScoreCount = scoreCount;

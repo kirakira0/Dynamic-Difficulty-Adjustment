@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PickupPoints : MonoBehaviour 
 {
-    public int scoreToGive;
+    public bool acclimated = false;
 
     private ScoreManager scoreManager;
 
@@ -18,13 +18,15 @@ public class PickupPoints : MonoBehaviour
 	{
 	
 	}
+    
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.name == "Player")
         {
-            scoreManager.AddScore(scoreToGive);
+            scoreManager.AddScore(1);
             gameObject.SetActive(false);
         }
     }
+
 }
