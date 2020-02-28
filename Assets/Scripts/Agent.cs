@@ -13,19 +13,20 @@ public class Agent : MonoBehaviour
 
     public List<string> sequence = new List<string>();
 
-
+    private string s = "small"; 
+    private string me = "medium"; 
+    private string la = "long"; 
+    private string lo = "low"; 
+    private string mi = "mid"; 
+    private string h = "high"; 
 
     void Start()
     {
         Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
-        sequence.Add("medium");
-        sequence.Add("low"); 
-        sequence.Add("small"); 
-        sequence.Add("mid"); 
-        sequence.Add("small");
-        sequence.Add("low"); 
+        sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
+
         
         Debug.Log(sequence[4]); 
  
@@ -38,7 +39,6 @@ public class Agent : MonoBehaviour
     }
 
     void RepeatCallToEnv() {
-<<<<<<< HEAD
         // Environment.Generate("m", "low");
         Environment.Generate(i, sequence); 
         if (i + 2 < sequence.Count) {
@@ -48,9 +48,5 @@ public class Agent : MonoBehaviour
             i = 0; 
         }
 
-=======
-        Environment.Generate("short", "mid"); 
-        //CoinGenerator.SpawnCoins(v);
->>>>>>> 988f702fd91a458c2bf3fcbf40750a857a433a01
     }
 }
