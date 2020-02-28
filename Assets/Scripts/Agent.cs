@@ -40,9 +40,10 @@ public class Agent : MonoBehaviour
             sequence.Clear(); 
             sequence.AddRange(new List<string>() {l, h, me, mi, s, lo, me, mi});
         }
-        if (Input.GetKeyDown(KeyCode.B)) {
+        if (Input.GetKeyDown(KeyCode.S)) {
             sequence.Clear(); 
-            sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
+            // sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
+            sequence.AddRange(new List<string>() {l, lo, l, lo});
         }
     }
 
