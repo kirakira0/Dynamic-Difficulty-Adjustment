@@ -3,10 +3,12 @@ using System.Collections;
 
 public class CoinGenerator : MonoBehaviour 
 {
-
     public ObjectPooler coinPool;
 
     public float distanceBetweenCoins;
+
+    //TODO: Tie coins to platforms generated
+    //TODO: revise ScoreManager and PickupPoints to associate score with coins
 
     public void SpawnCoins(Vector3 startPosition)
     {
