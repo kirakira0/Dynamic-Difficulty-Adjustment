@@ -14,7 +14,8 @@ public class ScoreManager : MonoBehaviour
     public bool scoreIncreasing; 
 
     public bool acclimated;
-    public float[] scores;
+    //USE QUEUES
+    Queue scores = new Queue;
     int emptyIndex = 0;
     int platformIndex = 0;
 
@@ -30,7 +31,6 @@ public class ScoreManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-         Console.WriteLine("We here ");
         if(scoreCount > highScoreCount)
         {
             highScoreCount = scoreCount;
@@ -43,21 +43,23 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore (int pointsScored)
     { 
-        Console.WriteLine("ScoreCount is: " + scoreCount);
-        //while(scoreCount < 10){
-            scoreCount += pointsScored;
-        //}   
-       
-        // scores[emptyIndex] = scoreCount;
-        // emptyIndex++;
-        // checkAcclimation(scoreCount);
+        Debug.Log("ScoreCount is: " + scoreCount);
+        scoreCount += pointsScored;
+
+        if(scoreCount == 10){
+            scores[emptyIndex] = scoreCount;
+            emptyIndex++;
+            scoreCount = 0;
+
+       }
+        checkAcclimation(scoreCount);
     }
 
     // public void checkAcclimation (float scoreCount) {
-    //     if(scores.Length <= 3){
+    //     if(scores.Length <= 5){
     //         if(scores[scores.Length - 1] == scores[scores.Length - 2] && scores[scores.Length - 1] == scores[scores.Length - 3] ){
     //             acclimated = true;
-    //             Console.WriteLine("Acclimated!");
+    //             Debug.Log("Acclimated!");
     //         }
     //         acclimated = false;
     //     }            
