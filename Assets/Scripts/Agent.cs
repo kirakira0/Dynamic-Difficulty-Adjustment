@@ -15,7 +15,7 @@ public class Agent : MonoBehaviour
 
     private string s = "small"; 
     private string me = "medium"; 
-    private string la = "long"; 
+    private string l = "long"; 
     private string lo = "low"; 
     private string mi = "mid"; 
     private string h = "high"; 
@@ -27,6 +27,7 @@ public class Agent : MonoBehaviour
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
         sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
 
+
         
         Debug.Log(sequence[4]); 
  
@@ -35,7 +36,14 @@ public class Agent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.A)) {
+            sequence.Clear(); 
+            sequence.AddRange(new List<string>() {l, h, me, mi, s, lo, me, mi});
+        }
+        if (Input.GetKeyDown(KeyCode.B)) {
+            sequence.Clear(); 
+            sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
+        }
     }
 
     void RepeatCallToEnv() {
