@@ -19,12 +19,7 @@ public class PickupPoints : MonoBehaviour
 	{
 	
 	}
-<<<<<<< HEAD
     
-=======
-
-    //Increase score when coins are collected
->>>>>>> master
     void OnTriggerEnter2D(Collider2D other)
     {
         Console.WriteLine("We here ");
