@@ -22,7 +22,7 @@ public class PickupPoints : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D other)
     {
-        Console.WriteLine("We here ");
+        //Console.WriteLine("We here ");
         if(other.gameObject.name == "Player")
         {
             scoreManager.AddScore(1);

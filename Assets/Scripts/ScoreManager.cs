@@ -14,10 +14,9 @@ public class ScoreManager : MonoBehaviour
     public bool scoreIncreasing; 
 
     public bool acclimated;
-    //USE QUEUES
-    Queue scores = new Queue;
-    int emptyIndex = 0;
-    int platformIndex = 0;
+    public float acclimationScore;
+    Queue scores = new Queue();
+
 
 	// Use this for initialization
 	void Start () 
@@ -43,25 +42,24 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore (int pointsScored)
     { 
-        Debug.Log("ScoreCount is: " + scoreCount);
+        //Debug.Log("ScoreCount is: " + scoreCount);
         scoreCount += pointsScored;
-
-        if(scoreCount == 10){
-            scores[emptyIndex] = scoreCount;
-            emptyIndex++;
-            scoreCount = 0;
-
-       }
-        checkAcclimation(scoreCount);
+        scores.Enqueue(scoreCount);
+        if (scores.Count > 5){
+            Debug.Log("Dequeueing ");
+            scores.Dequeue();
+            Debug.Log("Number of elemenets in queue is: " + scores.Count);
+        }
+        Debug.Log("Number of elemenets in queue is: " + scores.Count);
+        // checkAcclimation(scoreCount);
     }
 
-    // public void checkAcclimation (float scoreCount) {
-    //     if(scores.Length <= 5){
-    //         if(scores[scores.Length - 1] == scores[scores.Length - 2] && scores[scores.Length - 1] == scores[scores.Length - 3] ){
-    //             acclimated = true;
-    //             Debug.Log("Acclimated!");
-    //         }
-    //         acclimated = false;
-    //     }            
-    // }
+    public void checkAcclimation (float scoreCount) {
+        // if(scores.){
+        //     acclimated = true;
+        //     Debug.Log("Acclimated!");
+        // }
+        acclimated = false;
+                    
+    }
 }
