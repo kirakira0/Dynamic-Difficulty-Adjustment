@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; 
 
 public class Agent : MonoBehaviour
 {
@@ -10,14 +11,16 @@ public class Agent : MonoBehaviour
     public CoinGenerator CoinGenerator;
     Vector3 v = new Vector3(0, 0, 1);
     // Start is called before the first frame update
+    public Text totalCoinsText; 
+    private int totalCoins; 
 
     public List<string> sequence = new List<string>();
 
-    private string s = "small"; 
-    private string me = "medium"; 
-    private string l = "long"; 
-    private string lo = "low"; 
-    private string mi = "mid"; 
+    private string S = "small"; 
+    private string M = "medium"; 
+    private string L = "long"; 
+    private string l = "low"; 
+    private string m = "mid"; 
     private string h = "high"; 
 
     void Start()
@@ -25,9 +28,9 @@ public class Agent : MonoBehaviour
         Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
-        sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
+        sequence.AddRange(new List<string>() {M, l, S, m, S, l});
 
-
+        CalculateTotalCoins(); 
         
         Debug.Log(sequence[4]); 
  
@@ -36,16 +39,19 @@ public class Agent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
+
         if (Input.GetKeyDown(KeyCode.A)) {
             sequence.Clear(); 
             i = 0; 
-            sequence.AddRange(new List<string>() {l, h, me, mi, s, lo, me, mi});
+            sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
+            CalculateTotalCoins(); 
         }
         if (Input.GetKeyDown(KeyCode.S)) {
             sequence.Clear(); 
             i = 0; 
-            // sequence.AddRange(new List<string>() {me, lo, s, mi, s, lo});
-            sequence.AddRange(new List<string>() {l, lo, l, lo});
+            sequence.AddRange(new List<string>() {L, l, L, l});
+            CalculateTotalCoins(); 
         }
     }
 
@@ -59,5 +65,20 @@ public class Agent : MonoBehaviour
             i = 0; 
         }
 
+    }
+
+    void CalculateTotalCoins() {
+        totalCoins = 0; 
+        for (int j = 0; j < sequence.Count; j += 2) {
+            if (sequence[j] == "long") {
+                totalCoins += 7; 
+            }
+            else if (sequence[j] == "medium") {
+                totalCoins += 5; 
+            }
+            else if (sequence[j] == "small") {
+                totalCoins += 3; 
+            }
+        }
     }
 }
