@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 public class ScoreManager : MonoBehaviour 
 {
@@ -9,13 +10,16 @@ public class ScoreManager : MonoBehaviour
     public Text highScoreText;
     public Environment env;
 
-    public float scoreCount;
-    public float highScoreCount;
+    public int scoreCount;
+    public int highScoreCount;
     public bool scoreIncreasing; 
+    public int listCount = 0;
 
     public bool acclimated;
     public float acclimationScore;
-    Queue scores = new Queue();
+    LinkedList<int> scores = new LinkedList<int>();
+    LinkedListNode<int> current;
+    LinkedListNode<int> previous;
 
 
 	// Use this for initialization
@@ -23,7 +27,7 @@ public class ScoreManager : MonoBehaviour
 	{
 	    if(PlayerPrefs.HasKey("highScore"))
         {
-            highScoreCount = PlayerPrefs.GetFloat("highScore");
+            highScoreCount = PlayerPrefs.GetInt("highScore");
         }
 	}
 	
@@ -42,24 +46,22 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore (int pointsScored)
     { 
-        //Debug.Log("ScoreCount is: " + scoreCount);
         scoreCount += pointsScored;
-        scores.Enqueue(scoreCount);
+        scores.AddLast(scoreCount);
         if (scores.Count > 5){
-            Debug.Log("Dequeueing ");
-            scores.Dequeue();
+            scores.RemoveFirst();
             Debug.Log("Number of elemenets in queue is: " + scores.Count);
         }
-        Debug.Log("Number of elemenets in queue is: " + scores.Count);
-        // checkAcclimation(scoreCount);
+        Debug.Log("listcount is: " + scores.Count);
+        //Debug.Log("Number of elemenets in queue is: " + listCount);
+        //checkAcclimation(scoreCount);
     }
 
-    public void checkAcclimation (float scoreCount) {
-        // if(scores.){
+    public void checkAcclimation (int scoreCount) {
+        // if(scores.List == scores.Previous && scores.Previous == scores.Previous.Previous){
         //     acclimated = true;
         //     Debug.Log("Acclimated!");
         // }
-        acclimated = false;
-                    
+        acclimated = false;                
     }
 }
