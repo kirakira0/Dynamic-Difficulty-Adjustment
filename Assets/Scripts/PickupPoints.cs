@@ -7,11 +7,13 @@ public class PickupPoints : MonoBehaviour
     public bool acclimated = false;
 
     private ScoreManager scoreManager;
+    private Agent Agent; 
 
 	// Use this for initialization
 	void Start () 
 	{
         scoreManager = FindObjectOfType<ScoreManager>();
+        Agent = FindObjectOfType<Agent>(); 
 	}
 	
 	// Update is called once per frame

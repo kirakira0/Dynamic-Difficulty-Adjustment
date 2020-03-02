@@ -10,10 +10,10 @@ public class ScoreManager : MonoBehaviour
     public Text highScoreText;
     public Environment env;
 
-    public int scoreCount;
-    public int highScoreCount;
-    public bool scoreIncreasing; 
-    public int listCount = 0;
+    private Agent Agent; 
+
+    public float scoreCount;
+    public float highScoreCount;
 
     public bool acclimated;
     public float acclimationScore;
@@ -25,6 +25,7 @@ public class ScoreManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+        Agent = FindObjectOfType<Agent>();
 	    if(PlayerPrefs.HasKey("highScore"))
         {
             highScoreCount = PlayerPrefs.GetInt("highScore");
