@@ -12,6 +12,7 @@ public class Agent : MonoBehaviour
 
     private float totalCoins; 
     private float acclimationScore; 
+    private Queue recentAcclimationScores = new Queue();  
 
 
     Vector3 v = new Vector3(0, 0, 1);
@@ -50,36 +51,32 @@ public class Agent : MonoBehaviour
     void Update()
     {
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
-        acclimationText.text = acclimationScore.ToString(); 
+        acclimationText.text = recentAcclimationScores.Count.ToString(); 
 
-        if (Input.GetKeyDown(KeyCode.A)) {
-            sequence.Clear(); 
-            i = 0; 
-            sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
-            CalculateTotalCoins(); 
-        }
-        if (Input.GetKeyDown(KeyCode.S)) {
+        if (recentAcclimationScores.Count > 2) {  //IF ACCLIMATED
+            ScoreManager.scoreCount = 0;
+            recentAcclimationScores.Clear(); 
             sequence.Clear(); 
             i = 0; 
             sequence.AddRange(new List<string>() {L, l, L, l});
+            //     sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
             CalculateTotalCoins(); 
         }
+
     }
 
     void RepeatCallToEnv() {
-        // Environment.Generate("m", "low");
         Environment.Generate(i, sequence);
         if (i == 2) {
             acclimationScore = ScoreManager.scoreCount / totalCoins;
-            Debug.Log(acclimationScore); 
+            recentAcclimationScores.Enqueue(acclimationScore); 
             ScoreManager.scoreCount = 0;
             acclimationScore = 0;   
         } 
         if (i + 2 < sequence.Count) {
             i += 2; 
         }
-        else {
-            //END OF THE SEQUENCE
+        else {  //END OF THE SEQUENCE
             i = 0;
         }
 
