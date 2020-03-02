@@ -8,11 +8,17 @@ public class Agent : MonoBehaviour
     private int i = 0; 
 
     public Environment Environment; 
-    public CoinGenerator CoinGenerator;
-    Vector3 v = new Vector3(0, 0, 1);
-    // Start is called before the first frame update
-    public Text totalCoinsText; 
+    private ScoreManager ScoreManager; 
+
     private int totalCoins; 
+    private float acclimationScore; 
+
+
+    Vector3 v = new Vector3(0, 0, 1);
+
+    public Text totalCoinsText; 
+    public Text coinsCollected; 
+    public Text acclimationText; 
 
     public List<string> sequence = new List<string>();
 
@@ -25,6 +31,8 @@ public class Agent : MonoBehaviour
 
     void Start()
     {
+        ScoreManager = FindObjectOfType<ScoreManager>();
+
         Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
@@ -40,6 +48,7 @@ public class Agent : MonoBehaviour
     void Update()
     {
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
+        acclimationText.text = acclimationScore.ToString(); 
 
         if (Input.GetKeyDown(KeyCode.A)) {
             sequence.Clear(); 
@@ -57,12 +66,18 @@ public class Agent : MonoBehaviour
 
     void RepeatCallToEnv() {
         // Environment.Generate("m", "low");
-        Environment.Generate(i, sequence); 
+        Environment.Generate(i, sequence);
+        if (i == 0) {
+            acclimationScore = ScoreManager.scoreCount / totalCoins; 
+        } 
         if (i + 2 < sequence.Count) {
             i += 2; 
         }
         else {
-            i = 0; 
+            //END OF THE SEQUENCE
+            i = 0;
+            ScoreManager.scoreCount = 0; 
+            acclimationScore = 0;  
         }
 
     }

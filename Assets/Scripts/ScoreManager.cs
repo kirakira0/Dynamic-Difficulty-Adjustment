@@ -7,6 +7,8 @@ public class ScoreManager : MonoBehaviour
     public Text scoreText;
     public Text highScoreText;
 
+    private Agent Agent; 
+
     public float scoreCount;
     public float highScoreCount;
 
@@ -17,6 +19,7 @@ public class ScoreManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+        Agent = FindObjectOfType<Agent>();
 	    if(PlayerPrefs.HasKey("highScore"))
         {
             highScoreCount = PlayerPrefs.GetFloat("highScore");
@@ -26,23 +29,25 @@ public class ScoreManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-        if (scoreIncreasing)
-        {
-            scoreCount += pointsPerSecond * Time.deltaTime;
-        }
+        Agent.coinsCollected.text = "COINS COLLECTED: " + scoreCount.ToString(); 
+        // if (scoreIncreasing)
+        // {
+        //     scoreCount += pointsPerSecond * Time.deltaTime;
+        // }
 
-        if(scoreCount > highScoreCount)
-        {
-            highScoreCount = scoreCount;
-            PlayerPrefs.SetFloat("highScore", highScoreCount);
-        }
+        // if(scoreCount > highScoreCount)
+        // {
+        //     highScoreCount = scoreCount;
+        //     PlayerPrefs.SetFloat("highScore", highScoreCount);
+        // }
 
-        scoreText.text = "Score: " + Mathf.Round(scoreCount);
-        highScoreText.text = "High Score: " + Mathf.Round(highScoreCount);
+        // scoreText.text = "Score: " + Mathf.Round(scoreCount);
+        // highScoreText.text = "High Score: " + Mathf.Round(highScoreCount);
 	}
 
     public void AddScore(int pointsScored)
     {
-        scoreCount += pointsScored;
+        scoreCount += pointsScored;                
+
     }
 }
