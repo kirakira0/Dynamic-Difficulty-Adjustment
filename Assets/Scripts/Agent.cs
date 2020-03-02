@@ -10,7 +10,7 @@ public class Agent : MonoBehaviour
     public Environment Environment; 
     private ScoreManager ScoreManager; 
 
-    private int totalCoins; 
+    private float totalCoins; 
     private float acclimationScore; 
 
 
@@ -36,11 +36,13 @@ public class Agent : MonoBehaviour
         Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
-        sequence.AddRange(new List<string>() {M, l, S, m, S, l});
+        // sequence.AddRange(new List<string>() {M, l, S, m, S, l});
+        sequence.AddRange(new List<string>() {M, l, M, m});
+
 
         CalculateTotalCoins(); 
         
-        Debug.Log(sequence[4]); 
+        Debug.Log(i); 
  
     }
 
@@ -67,8 +69,11 @@ public class Agent : MonoBehaviour
     void RepeatCallToEnv() {
         // Environment.Generate("m", "low");
         Environment.Generate(i, sequence);
-        if (i == 0) {
-            acclimationScore = ScoreManager.scoreCount / totalCoins; 
+        if (i == 2) {
+            acclimationScore = ScoreManager.scoreCount / totalCoins;
+            Debug.Log(acclimationScore); 
+            ScoreManager.scoreCount = 0;
+            acclimationScore = 0;   
         } 
         if (i + 2 < sequence.Count) {
             i += 2; 
@@ -76,8 +81,6 @@ public class Agent : MonoBehaviour
         else {
             //END OF THE SEQUENCE
             i = 0;
-            ScoreManager.scoreCount = 0; 
-            acclimationScore = 0;  
         }
 
     }
