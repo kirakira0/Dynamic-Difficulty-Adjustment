@@ -20,6 +20,8 @@ public class Agent : MonoBehaviour
     public Text totalCoinsText; 
     public Text coinsCollected; 
     public Text acclimationText; 
+    public bool acclimated = false;
+    public float acclimationThreshold = 0.3;
 
     public List<string> sequence = new List<string>();
 
@@ -52,8 +54,8 @@ public class Agent : MonoBehaviour
     {
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
         acclimationText.text = recentAcclimationScores.Count.ToString(); 
-
-        if (recentAcclimationScores.Count > 2) {  //IF ACCLIMATED
+        checkAcclimation(recentAcclimationScores);
+        if (acclimated = true) {  //IF ACCLIMATED
             ScoreManager.scoreCount = 0;
             recentAcclimationScores.Clear(); 
             sequence.Clear(); 
@@ -63,6 +65,21 @@ public class Agent : MonoBehaviour
             CalculateTotalCoins(); 
         }
 
+    }
+
+    public void checkAcclimation (Queue recentAcclimationScores) {
+        float variance = 0;
+        float sum = 0;
+        for(int i = 0; i < 6; i++){
+            sum = sum + recentAcclimationScores[i];
+        }  
+        float average = sum / 5;
+        for(int i = 0; i < 6; i++){
+            variance = variance + Math.pow(recentAcclimationScores[i] - average, 2);
+        }
+        if(variance <= acclimationThreshold){
+            acclimated = true;
+        }      
     }
 
     void RepeatCallToEnv() {

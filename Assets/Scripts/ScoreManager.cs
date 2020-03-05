@@ -57,12 +57,4 @@ public class ScoreManager : MonoBehaviour
         //Debug.Log("Number of elemenets in queue is: " + listCount);
         //checkAcclimation(scoreCount);
     }
-
-    public void checkAcclimation (int scoreCount) {
-        // if(scores.List == scores.Previous && scores.Previous == scores.Previous.Previous){
-        //     acclimated = true;
-        //     Debug.Log("Acclimated!");
-        // }
-        acclimated = false;                
-    }
 }
