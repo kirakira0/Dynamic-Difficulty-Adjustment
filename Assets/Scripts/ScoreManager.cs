@@ -11,9 +11,9 @@ public class ScoreManager : MonoBehaviour
     public Environment env;
 
     private Agent Agent; 
-
-    public float scoreCount;
-    public float highScoreCount;
+    public bool scoreIncreasing;
+    public int scoreCount;
+    public int highScoreCount;
 
     public bool acclimated;
     public float acclimationScore;
