@@ -10,8 +10,9 @@ public class Agent : MonoBehaviour
     public Environment Environment; 
     private ScoreManager ScoreManager; 
 
-    private int totalCoins; 
+    private float totalCoins; 
     private float acclimationScore; 
+    private Queue recentAcclimationScores = new Queue();  
 
 
     Vector3 v = new Vector3(0, 0, 1);
@@ -36,11 +37,13 @@ public class Agent : MonoBehaviour
         Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
-        sequence.AddRange(new List<string>() {M, l, S, m, S, l});
+        // sequence.AddRange(new List<string>() {M, l, S, m, S, l});
+        sequence.AddRange(new List<string>() {M, l, M, m});
+
 
         CalculateTotalCoins(); 
         
-        Debug.Log(sequence[4]); 
+        Debug.Log(i); 
  
     }
 
@@ -48,36 +51,33 @@ public class Agent : MonoBehaviour
     void Update()
     {
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
-        acclimationText.text = acclimationScore.ToString(); 
+        acclimationText.text = recentAcclimationScores.Count.ToString(); 
 
-        if (Input.GetKeyDown(KeyCode.A)) {
-            sequence.Clear(); 
-            i = 0; 
-            sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
-            CalculateTotalCoins(); 
-        }
-        if (Input.GetKeyDown(KeyCode.S)) {
+        if (recentAcclimationScores.Count > 2) {  //IF ACCLIMATED
+            ScoreManager.scoreCount = 0;
+            recentAcclimationScores.Clear(); 
             sequence.Clear(); 
             i = 0; 
             sequence.AddRange(new List<string>() {L, l, L, l});
+            //     sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
             CalculateTotalCoins(); 
         }
+
     }
 
     void RepeatCallToEnv() {
-        // Environment.Generate("m", "low");
         Environment.Generate(i, sequence);
-        if (i == 0) {
-            acclimationScore = ScoreManager.scoreCount / totalCoins; 
+        if (i == 2) {
+            acclimationScore = ScoreManager.scoreCount / totalCoins;
+            recentAcclimationScores.Enqueue(acclimationScore); 
+            ScoreManager.scoreCount = 0;
+            acclimationScore = 0;   
         } 
         if (i + 2 < sequence.Count) {
             i += 2; 
         }
-        else {
-            //END OF THE SEQUENCE
+        else {  //END OF THE SEQUENCE
             i = 0;
-            ScoreManager.scoreCount = 0; 
-            acclimationScore = 0;  
         }
 
     }
