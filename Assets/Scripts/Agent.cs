@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+using System; 
 
 public class Agent : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Agent : MonoBehaviour
 
     private float totalCoins; 
     private float acclimationScore; 
-    private Queue recentAcclimationScores = new Queue();  
+    private float[] recentAcclimationScores = new float[5];  
 
 
     Vector3 v = new Vector3(0, 0, 1);
@@ -21,7 +22,7 @@ public class Agent : MonoBehaviour
     public Text coinsCollected; 
     public Text acclimationText; 
     public bool acclimated = false;
-    public float acclimationThreshold = 0.3;
+    public float acclimationThreshold = 0.3F;
 
     public List<string> sequence = new List<string>();
 
@@ -53,11 +54,13 @@ public class Agent : MonoBehaviour
     void Update()
     {
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
-        acclimationText.text = recentAcclimationScores.Count.ToString(); 
+        acclimationText.text = recentAcclimationScores.Length.ToString(); 
         checkAcclimation(recentAcclimationScores);
-        if (acclimated = true) {  //IF ACCLIMATED
+        if (acclimated == true) {  //IF ACCLIMATED
             ScoreManager.scoreCount = 0;
-            recentAcclimationScores.Clear(); 
+            for(int i = 0; i < recentAcclimationScores.Length; i++){
+                recentAcclimationScores[i] = 0;
+            }
             sequence.Clear(); 
             i = 0; 
             sequence.AddRange(new List<string>() {L, l, L, l});
@@ -67,18 +70,24 @@ public class Agent : MonoBehaviour
 
     }
 
-    public void checkAcclimation (Queue recentAcclimationScores) {
+    public void checkAcclimation (float[] recentAcclimationScores) {
+        Debug.Log("In Acclimation Checker");
         float variance = 0;
         float sum = 0;
-        for(int i = 0; i < 6; i++){
+        if(recentAcclimationScores.Length < 5){
+            return;
+        }
+        for(int i = 0; i < 5; i++){
             sum = sum + recentAcclimationScores[i];
         }  
         float average = sum / 5;
-        for(int i = 0; i < 6; i++){
-            variance = variance + Math.pow(recentAcclimationScores[i] - average, 2);
+        for(int i = 0; i < 5; i++){
+            variance = variance + (float)Math.Pow(recentAcclimationScores[i] - average, 2);
         }
         if(variance <= acclimationThreshold){
+            Debug.Log("variance: " + variance);
             acclimated = true;
+            Debug.Log("ACCLIMATED!");
         }      
     }
 
@@ -86,7 +95,11 @@ public class Agent : MonoBehaviour
         Environment.Generate(i, sequence);
         if (i == 2) {
             acclimationScore = ScoreManager.scoreCount / totalCoins;
-            recentAcclimationScores.Enqueue(acclimationScore); 
+            for(int i = 0; i < recentAcclimationScores.Length; i++){
+                if(recentAcclimationScores[i] != 0){
+                    recentAcclimationScores[i]= acclimationScore; 
+                }
+            }
             ScoreManager.scoreCount = 0;
             acclimationScore = 0;   
         } 
