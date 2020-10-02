@@ -2,41 +2,28 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-// UnityWebRequest.Get example
-
-// Access a website and use UnityWebRequest.Get to download a page.
-// Also try to download a non-existing page. Display the error.
-
 public class Web : MonoBehaviour
 {
-
-    void Start()
-    {
-        // A correct website page.
-        // Use coroutine b/c we need to wait for a reply from the server (can't be done in 1 frame).
-        StartCoroutine(GetRequest("http://localhost:8081/DDA/GetDate.php"));
-
-        // A non-existing page.
-        StartCoroutine(GetRequest("https://error.html")); 
+    string dateURL = "http://192.168.64.2/DDA/GetDate.php";
+    string usersURL = "http://192.168.64.2/DDA/GetUsers.php";
+    
+    // Use coroutine b/c we need to wait for a reply from the server (can't be done in 1 frame).
+    void Start() {
+        StartCoroutine(GetData(dateURL));
+        StartCoroutine(GetData(usersURL));
     }
 
-    IEnumerator GetRequest(string uri)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
-            string[] pages = uri.Split('/');
-            int page = pages.Length - 1;
-
-            if (webRequest.isNetworkError)
-            {
-                Debug.Log(pages[page] + ": Error: " + webRequest.error);
-            }
-            else
-            {
-                Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+    IEnumerator GetData(string URL) {
+        using (UnityWebRequest www = UnityWebRequest.Get(URL)) {
+            //yield return www.Send();
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError) {
+                Debug.Log(www.error);
+            } else {
+                // Show results as text.
+                Debug.Log(www.downloadHandler.text);
+                // Or retrieve as binary data
+                byte[] results = www.downloadHandler.data;  
             }
         }
     }
