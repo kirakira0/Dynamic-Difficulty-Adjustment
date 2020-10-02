@@ -4,18 +4,37 @@ using System.Collections;
 
 public class Web : MonoBehaviour
 {
-    string dateURL = "http://192.168.64.2/DDA/GetDate.php";
-    string usersURL = "http://192.168.64.2/DDA/GetUsers.php";
+    string dateURL = "http://localhost:8080/DDA/GetDate.php";
+    string usersURL = "http://localhost:8080/DDA/GetUsers.php";
+    string registerPlayerURL = "http://localhost:8080/DDA/RegisterUser.php";
     
     // Use coroutine b/c we need to wait for a reply from the server (can't be done in 1 frame).
     void Start() {
-        StartCoroutine(GetData(dateURL));
-        StartCoroutine(GetData(usersURL));
+        // StartCoroutine(GetData(dateURL));
+        // StartCoroutine(GetData(usersURL));
+        StartCoroutine(RegisterPlayer(registerPlayerURL, "new test ip"));
     }
 
     IEnumerator GetData(string URL) {
         using (UnityWebRequest www = UnityWebRequest.Get(URL)) {
             //yield return www.Send();
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError) {
+                Debug.Log(www.error);
+            } else {
+                // Show results as text.
+                Debug.Log(www.downloadHandler.text);
+                // Or retrieve as binary data
+                byte[] results = www.downloadHandler.data;  
+            }
+        }
+    }
+
+    IEnumerator RegisterPlayer(string URL, string userIp) {
+        WWWForm form = new WWWForm();
+        form.AddField("userIp", userIp);
+        
+        using (UnityWebRequest www = UnityWebRequest.Post(URL, form)) {
             yield return www.SendWebRequest();
             if (www.isNetworkError || www.isHttpError) {
                 Debug.Log(www.error);
