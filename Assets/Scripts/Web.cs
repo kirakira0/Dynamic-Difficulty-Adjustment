@@ -12,7 +12,7 @@ public class Web : MonoBehaviour
     void Start() {
         // StartCoroutine(GetData(dateURL));
         // StartCoroutine(GetData(usersURL));
-        StartCoroutine(RegisterPlayer(registerPlayerURL, "new test ip"));
+        StartCoroutine(RegisterPlayer(registerPlayerURL, "test #4"));
     }
 
     IEnumerator GetData(string URL) {
