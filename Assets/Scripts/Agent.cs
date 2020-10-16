@@ -33,23 +33,22 @@ public class Agent : MonoBehaviour
     void Start()
     {
         ScoreManager = FindObjectOfType<ScoreManager>();
-
         Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
         // sequence.AddRange(new List<string>() {M, l, S, m, S, l});
         sequence.AddRange(new List<string>() {M, l, M, m});
-
-
-        CalculateTotalCoins(); 
-        
+        CalculateTotalCoins();    
         Debug.Log(i); 
- 
     }
 
     // Update is called once per frame
     void Update()
     {
+        // if (Input.GetKeyDown(KeyCode.Return)) {
+        //     CancelInvoke();
+        // }
+
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
         acclimationText.text = recentAcclimationScores.Count.ToString(); 
 

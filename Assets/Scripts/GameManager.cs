@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 
+    public Text livesText; 
+    
     public PlayerController thePlayer;
     private Vector3 playerStartPoint;
 
@@ -46,5 +49,9 @@ public class GameManager : MonoBehaviour
         thePlayer.gameObject.SetActive(true);
         scoreManager.scoreCount = 0;
         scoreManager.scoreIncreasing = true;
+    }
+
+    void Update() {
+        livesText.text = "LIVES: " + thePlayer.lives;
     }
 }

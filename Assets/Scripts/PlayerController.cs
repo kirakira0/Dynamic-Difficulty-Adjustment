@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    public int lives = 3;
+    public GameObject spawnPoint; 
+    
     public bool flightMode = false; 
     
     public float moveSpeed;
@@ -106,9 +109,15 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.tag == "killbox")
         {
-            gameManager.RestartGame();
-            moveSpeed = startSpeed;
-            speedMilestoneCount = startSpeedMilestoneCount;
+            this.lives--;
+            if (this.lives <= 0) {
+                gameManager.RestartGame();
+                moveSpeed = startSpeed;
+                speedMilestoneCount = startSpeedMilestoneCount;
+            } else {
+                this.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, 0);
+                canDoubleJump = true;
+            }
         }
     }
 }
