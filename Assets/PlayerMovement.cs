@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float horizontalMovementSpeed = 5f;
     public LayerMask platformLayer;
     
+    private float GRAVITY_FLOAT = 3;
     private Rigidbody2D playerRigidbody;
 
     void Awake()
@@ -21,11 +22,11 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
         if (hit.collider.tag == "Platform") {
             Debug.Log("PLATFORM AVAILIBLE");
+            DropPlayer();
         } else {
             Debug.Log("no hit");
             Debug.Log(playerRigidbody.position);
-            playerRigidbody.position = new Vector2(playerRigidbody.position.x + 0.05f, playerRigidbody.position.y);
-            
+            playerRigidbody.position = new Vector2(playerRigidbody.position.x + 0.1f, playerRigidbody.position.y);            
         }
     }
     
@@ -51,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
      * should be dropped into the scene.
      */
     private void DropPlayer() {
-
+        playerRigidbody.gravityScale = GRAVITY_FLOAT;
     }
 
     /**
