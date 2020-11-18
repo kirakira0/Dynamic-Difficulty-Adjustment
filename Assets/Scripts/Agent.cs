@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI; 
 
 public class Agent : MonoBehaviour
-{
+{    
     private int i = 0; 
 
     public Environment Environment; 
+    public PlayerController PlayerController; 
     private ScoreManager ScoreManager; 
 
     private float totalCoins; 
@@ -30,16 +31,14 @@ public class Agent : MonoBehaviour
     private string m = "mid"; 
     private string h = "high"; 
 
-    void Start()
+    void Awake()
     {
         ScoreManager = FindObjectOfType<ScoreManager>();
-        Debug.Log(Environment.test); 
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
         //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
         // sequence.AddRange(new List<string>() {M, l, S, m, S, l});
         sequence.AddRange(new List<string>() {M, l, M, m});
         CalculateTotalCoins();    
-        Debug.Log(i); 
     }
 
     // Update is called once per frame
@@ -47,6 +46,11 @@ public class Agent : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return)) {
             CancelInvoke();
+            PlayerController.moveSpeed = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.RightShift)) {
+            InvokeRepeating("RepeatCallToEnv", 1f, 1.5f);
+            PlayerController.moveSpeed = 6;
         }
 
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 

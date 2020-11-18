@@ -9,12 +9,6 @@ public class PlayerController : MonoBehaviour
     public bool flightMode = false; 
     
     public float moveSpeed;
-    // public float speedMultiplier;
-    // private float startSpeed;
-
-    // public float speedIncreaseMilestone;
-    // private float speedMilestoneCount;
-    // private float startSpeedMilestoneCount;
 
     public float jumpForce;
 
