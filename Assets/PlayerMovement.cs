@@ -21,11 +21,8 @@ public class PlayerMovement : MonoBehaviour
         Vector2 direction = transform.TransformDirection(Vector2.down);
         RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
         if (hit.collider.tag == "Platform") {
-            Debug.Log("PLATFORM AVAILIBLE");
             DropPlayer();
         } else {
-            Debug.Log("no hit");
-            Debug.Log(playerRigidbody.position);
             playerRigidbody.position = new Vector2(playerRigidbody.position.x + 0.1f, playerRigidbody.position.y);            
         }
     }

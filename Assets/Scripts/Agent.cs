@@ -45,9 +45,9 @@ public class Agent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.Return)) {
-        //     CancelInvoke();
-        // }
+        if (Input.GetKeyDown(KeyCode.Return)) {
+            CancelInvoke();
+        }
 
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
         acclimationText.text = recentAcclimationScores.Count.ToString(); 

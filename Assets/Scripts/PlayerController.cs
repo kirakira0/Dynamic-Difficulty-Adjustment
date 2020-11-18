@@ -9,12 +9,12 @@ public class PlayerController : MonoBehaviour
     public bool flightMode = false; 
     
     public float moveSpeed;
-    public float speedMultiplier;
-    private float startSpeed;
+    // public float speedMultiplier;
+    // private float startSpeed;
 
-    public float speedIncreaseMilestone;
-    private float speedMilestoneCount;
-    private float startSpeedMilestoneCount;
+    // public float speedIncreaseMilestone;
+    // private float speedMilestoneCount;
+    // private float startSpeedMilestoneCount;
 
     public float jumpForce;
 
@@ -35,74 +35,61 @@ public class PlayerController : MonoBehaviour
 
     public GameManager gameManager;
 
-
-	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         jumpTimeCounter = jumpTime;
-
-        startSpeed = moveSpeed;
-        startSpeedMilestoneCount = speedMilestoneCount;
         hasJumped = false;
     }
 	
-	// Update is called once per frame
 	void Update ()
     {
-        // if (!flightMode) {
-            grounded = Physics2D.OverlapCircle(groundCheck.position, groundedRadius, whatIsGround);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundedRadius, whatIsGround);
 
-            if(transform.position.x > speedIncreaseMilestone)
+        myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
+
+        if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        {
+            if (grounded)
             {
-                moveSpeed = moveSpeed * speedMultiplier;
-                speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier;
+                myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
+                hasJumped = true;
+                canDoubleJump = true;
             }
 
-            myRigidBody.velocity = new Vector2(moveSpeed, myRigidBody.velocity.y);
-
-            if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            if(!grounded && canDoubleJump)
             {
-                if (grounded)
-                {
-                    myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
-                    hasJumped = true;
-                    canDoubleJump = true;
-                }
-
-                if(!grounded && canDoubleJump)
-                {
-                    myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
-                    hasJumped = true;
-                    jumpTimeCounter = jumpTime;
-                    canDoubleJump = false;
-                }
-            }
-
-            if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
-            {
-                if(jumpTimeCounter > 0 && hasJumped)
-                {
-                    myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
-                    jumpTimeCounter -= Time.deltaTime;
-                }
-            }
-
-            if(Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0))
-            {
-                jumpTimeCounter = 0;
-                grounded = false;
-                hasJumped = false;
-            }
-
-            if(grounded)
-            {
+                myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
+                hasJumped = true;
                 jumpTimeCounter = jumpTime;
+                canDoubleJump = false;
             }
+        }
 
-            myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
-            myAnimator.SetBool("Grounded", grounded);
+        if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+        {
+            if(jumpTimeCounter > 0 && hasJumped)
+            {
+                myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, jumpForce);
+                jumpTimeCounter -= Time.deltaTime;
+            }
+        }
+
+        if(Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0))
+        {
+            jumpTimeCounter = 0;
+            grounded = false;
+            hasJumped = false;
+        }
+
+        if(grounded)
+        {
+            jumpTimeCounter = jumpTime;
+        }
+
+        myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
+        myAnimator.SetBool("Grounded", grounded);
 	}
 
     void OnCollisionEnter2D(Collision2D other)
@@ -112,8 +99,6 @@ public class PlayerController : MonoBehaviour
             this.lives--;
             if (this.lives <= 0) {
                 gameManager.RestartGame();
-                moveSpeed = startSpeed;
-                speedMilestoneCount = startSpeedMilestoneCount;
             } else {
                 this.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, 0);
                 canDoubleJump = true;
