@@ -5,14 +5,9 @@ using UnityEngine;
 
 public class Environment : MonoBehaviour
 {
-    //public ObjectPooler[] platformPool; 
     public GameObject[] platforms; 
     public GameObject player; 
     public GameObject platformGenerationPoint; 
-
-    // private float nextActionTime = 0.0f;
-    // public float period = 0.5f;
- 
 
     public GameObject shortPlatform;
     public GameObject mediumPlatform; 
@@ -27,28 +22,12 @@ public class Environment : MonoBehaviour
         shortPlatform = platforms[0];
         mediumPlatform = platforms[1];
         longPlatform = platforms[2]; 
-
-        //Generate("short", "mid"); 
- 
-        //InvokeRepeating("RepeatedGeneration", 1.0f, 1.0f);
-
     }
 
 
     void Update () {
         
     }
-
-    // void RepeatedGeneration()
-    // {
-    //     //instantiate creates the new platforms 
-    //     Instantiate(type[i], new Vector3(platformGenerationPoint.transform.position.x, position[i], 0), Quaternion.identity);
-    //     //log the updates platform generation position 
-    //     Debug.Log(platformGenerationPoint.transform.position.x);
-    //     //increment the index to work through the list 
-    //     i++; 
-
-    // }
 
     public void Generate(int index, List<string> sequence) {
         GameObject type = shortPlatform; 
@@ -70,10 +49,8 @@ public class Environment : MonoBehaviour
         }
         else if (sequence[index + 1] == "mid") {
             ypos = 0; 
-        }
-        
+        }        
         Instantiate(type, new Vector3(platformGenerationPoint.transform.position.x, ypos, 0), Quaternion.identity);
-
     }
 
 }

@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    private float GRAVITY_FLOAT = 3;
+    public float MOVE_SPEED = 6;
+
     public int lives = 3;
     public GameObject spawnPoint; 
     
@@ -15,12 +18,14 @@ public class PlayerController : MonoBehaviour
     public float jumpTime;
     private float jumpTimeCounter;
 
-    private Rigidbody2D myRigidBody;
+    public Rigidbody2D myRigidBody;
 
     public bool grounded;
     public Transform groundCheck;
     private bool hasJumped;
     private bool canDoubleJump;
+
+    public bool inDeathcatcher = false;
 
     public LayerMask whatIsGround;
     public float groundedRadius;
@@ -28,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private Animator myAnimator;
 
     public GameManager gameManager;
+    
 
 	void Awake ()
     {
@@ -35,6 +41,22 @@ public class PlayerController : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         jumpTimeCounter = jumpTime;
         hasJumped = false;
+    }
+
+    public void findPlatform() {
+        moveSpeed = 0;  
+        transform.position = new Vector3(transform.position.x, transform.position.y + 9.0f, 0);
+        myRigidBody.gravityScale = 0;
+        while (myRigidBody.gravityScale == 0) {
+            Vector2 position = transform.position;
+            Vector2 direction = transform.TransformDirection(Vector2.down);
+            RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
+            if (hit.collider.tag == "Platform") {
+                myRigidBody.gravityScale = GRAVITY_FLOAT;
+            } else {
+                myRigidBody.position = new Vector2(myRigidBody.position.x + 0.1f, myRigidBody.position.y);            
+            }
+        }
     }
 	
 	void Update ()
@@ -94,8 +116,9 @@ public class PlayerController : MonoBehaviour
             if (this.lives <= 0) {
                 gameManager.RestartGame();
             } else {
-                this.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, 0);
-                canDoubleJump = true;
+                inDeathcatcher = true;
+                // this.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, 0);
+                // canDoubleJump = true;
             }
         }
     }

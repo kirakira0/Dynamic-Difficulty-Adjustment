@@ -15,7 +15,6 @@ public class Agent : MonoBehaviour
     private float acclimationScore; 
     private Queue recentAcclimationScores = new Queue();  
 
-
     Vector3 v = new Vector3(0, 0, 1);
 
     public Text totalCoinsText; 
@@ -35,43 +34,62 @@ public class Agent : MonoBehaviour
     {
         ScoreManager = FindObjectOfType<ScoreManager>();
         InvokeRepeating("RepeatCallToEnv", 1.0f, 1.5f);
-        //acclimation --> don't even swtich before a minimum number of iterations, stable coing collection percetage
+        //acclimation --> don't even switch before a minimum number of iterations, stable coin collection percetage
         // sequence.AddRange(new List<string>() {M, l, S, m, S, l});
         sequence.AddRange(new List<string>() {M, l, M, m});
         CalculateTotalCoins();    
     }
 
-    // Update is called once per frame
+    private void handlePlayerFall() {
+        CancelInvoke();
+        PlayerController.moveSpeed = 0;
+        PlayerController.transform.position = new Vector3(PlayerController.transform.position.x + 1.0f, PlayerController.transform.position.y + 11.0f, 0);
+        // PlayerController.myRigidBody.gravityScale = 0;
+
+        Vector2 position = PlayerController.transform.position;
+        Vector2 direction = PlayerController.transform.TransformDirection(Vector2.down);
+        RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
+
+        PlayerController.inDeathcatcher = false; 
+        InvokeRepeating("RepeatCallToEnv", 1f, 1.5f);
+        PlayerController.moveSpeed = PlayerController.MOVE_SPEED;
+
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            CancelInvoke();
-            PlayerController.moveSpeed = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.RightShift)) {
-            InvokeRepeating("RepeatCallToEnv", 1f, 1.5f);
-            PlayerController.moveSpeed = 6;
+        if (PlayerController.inDeathcatcher) {
+            this.handlePlayerFall();     
         }
 
         totalCoinsText.text = "TOTAL CPS: " + totalCoins.ToString(); 
         acclimationText.text = recentAcclimationScores.Count.ToString(); 
 
+        // What to do when plauyer is acclimated.
+        // Hard coded for now but later will change so agent is picking from 
+        //  a range of sequence options. 
         if (recentAcclimationScores.Count > 2) {  //IF ACCLIMATED
             ScoreManager.scoreCount = 0;
             recentAcclimationScores.Clear(); 
             sequence.Clear(); 
             i = 0; 
             sequence.AddRange(new List<string>() {L, l, L, l});
-            //     sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
+            // sequence.AddRange(new List<string>() {L, h, M, m, S, l, M, m});
             CalculateTotalCoins(); 
         }
 
     }
 
+    // Tells the environment what platforms to generate. 
     void RepeatCallToEnv() {
         Environment.Generate(i, sequence);
+        // We now calculate platform generation at the end of a sequence 
+        //  as opposed to after a ceratin number of seconds. 
+        // We can also adjust the "window" size just by multiplying the 
+        //  length of the sequence by some number. 
         if (i == 2) {
             acclimationScore = ScoreManager.scoreCount / totalCoins;
+            // Add the current acclimation score to the queue. 
             recentAcclimationScores.Enqueue(acclimationScore); 
             ScoreManager.scoreCount = 0;
             acclimationScore = 0;   
