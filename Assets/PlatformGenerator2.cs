@@ -15,7 +15,7 @@ public class PlatformGenerator2 : MonoBehaviour
     public IEnumerator GenerateSequence(List<Agent2.Platform> sequence) {
 
         int sequenceIndex = 0; 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             if (!paused) {
                 if (sequenceIndex >= sequence.Count) {sequenceIndex = 0;}
                 Generate(sequence[sequenceIndex]);

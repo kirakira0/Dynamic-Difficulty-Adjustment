@@ -3,10 +3,13 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject FADE;
+
     public PlatformGenerator2 PLATFORM_GENERATOR; 
     public Transform PLAYER_SPAWN_POINT;
     public Transform STARTING_PLATFORM_SPAWN_POINT; 
     public GameObject STARTING_PLATFORM; 
+
 
     private float GRAVITY_FLOAT = 3;
     public float MOVE_SPEED = 6;
@@ -118,6 +121,7 @@ public class PlayerController : MonoBehaviour
         if(other.gameObject.tag == "killbox") {
             canDoubleJump = true;
             PLATFORM_GENERATOR.paused = true; 
+            FADE.SetActive(true);
             StartCoroutine(ExecuteAfterTime(5f));
         }
 
@@ -139,11 +143,9 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Instantiate(STARTING_PLATFORM, new Vector3(STARTING_PLATFORM_SPAWN_POINT.transform.position.x, STARTING_PLATFORM_SPAWN_POINT.transform.position.y, 0), Quaternion.identity);
-
         transform.position = new Vector3(PLAYER_SPAWN_POINT.transform.position.x, PLAYER_SPAWN_POINT.transform.position.y, 0);
-
-
-        Debug.Log("resume");
         PLATFORM_GENERATOR.paused = false; 
+        FADE.SetActive(false);
+
     }
 }
