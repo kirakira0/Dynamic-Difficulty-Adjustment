@@ -3,6 +3,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+
+
     private float GRAVITY_FLOAT = 3;
     public float MOVE_SPEED = 6;
 
@@ -104,14 +106,15 @@ public class PlayerController : MonoBehaviour
             jumpTimeCounter = jumpTime;
         }
 
-        myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
-        myAnimator.SetBool("Grounded", grounded);
+        // myAnimator.SetFloat("Speed", myRigidBody.velocity.x);
+        // myAnimator.SetBool("Grounded", grounded);
 	}
 
     void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.tag == "killbox")
         {
+            Debug.Log("caught");
             this.lives--;
             if (this.lives <= 0) {
                 gameManager.RestartGame();
@@ -120,6 +123,10 @@ public class PlayerController : MonoBehaviour
                 // this.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, 0);
                 // canDoubleJump = true;
             }
+        }
+        if(other.gameObject.tag == "Coin")
+        {
+            Debug.Log("coin");
         }
     }
 }

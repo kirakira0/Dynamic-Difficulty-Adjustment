@@ -12,6 +12,7 @@ public class PlatformGenerator2 : MonoBehaviour
     * Repeated platform generation occurs here.  
     */ 
     public IEnumerator GenerateSequence(List<Agent2.Platform> sequence) {
+        
         int sequenceIndex = 0; 
         for (int i = 0; i < 10; i++) {
             if (sequenceIndex >= sequence.Count) {sequenceIndex = 0;}

@@ -11,8 +11,8 @@ public class PickupPoints : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-        scoreManager = FindObjectOfType<ScoreManager>();
-        Agent = FindObjectOfType<Agent>(); 
+        // scoreManager = FindObjectOfType<ScoreManager>();
+        // Agent = FindObjectOfType<Agent>(); 
 	}
 	
 	// Update is called once per frame
@@ -26,7 +26,7 @@ public class PickupPoints : MonoBehaviour
     {
         if(other.gameObject.name == "Player")
         {
-            scoreManager.AddScore(scoreToGive);
+            // scoreManager.AddScore(scoreToGive);
             gameObject.SetActive(false);
         }
     }

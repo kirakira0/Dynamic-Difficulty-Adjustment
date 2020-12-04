@@ -4,44 +4,77 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float jumpForce = 10f;
-    public float horizontalMovementSpeed = 5f;
+    public float jumpForce = 1f;
     public LayerMask platformLayer;
     
     private float GRAVITY_FLOAT = 3;
     private Rigidbody2D playerRigidbody;
 
+    public bool grounded = false;
+    public Transform groundCheck;
+    public LayerMask whatIsGround;
+    public float groundedRadius;
+    private bool hasJumped;
+    private bool canDoubleJump;
+    public float jumpTime;
+    private float jumpTimeCounter;
+
     void Awake()
     {
+        jumpTimeCounter = jumpTime;
         playerRigidbody = GetComponent<Rigidbody2D>();        
     }
     
-    void Update() {        
-        Vector2 position = transform.position;
-        Vector2 direction = transform.TransformDirection(Vector2.down);
-        RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
-        if (hit.collider.tag == "Platform") {
-            DropPlayer();
-        } else {
-            playerRigidbody.position = new Vector2(playerRigidbody.position.x + 0.1f, playerRigidbody.position.y);            
-        }
+    void Update() { 
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundedRadius, whatIsGround);       
+        // Vector2 position = transform.position;
+        // Vector2 direction = transform.TransformDirection(Vector2.down);
+        // RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
+        // if (hit.collider.tag == "Platform") {
+        //     DropPlayer();
+        // } else {
+        //     playerRigidbody.position = new Vector2(playerRigidbody.position.x + 0.1f, playerRigidbody.position.y);            
+        // }
     }
     
     void FixedUpdate()
     {
-        // Player jumps with Z or Up Arrow key.
-        if(Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow)) {
+        // Player jumps with Z or Up Arrow key or Space bar.
+        if(Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space)) {
+            if (grounded)
+            {
             playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpForce);
-        } 
-        // Horizontal movement controlled with left and right arrow keys.
-        if (Input.GetKey(KeyCode.RightArrow)) {
-            playerRigidbody.velocity = new Vector2 (horizontalMovementSpeed, playerRigidbody.velocity.y);          
-        } else if (Input.GetKey(KeyCode.LeftArrow)) {
-            playerRigidbody.velocity = new Vector2 (-1 * horizontalMovementSpeed, playerRigidbody.velocity.y);          
-        } else {
-            playerRigidbody.velocity = new Vector2 (0, playerRigidbody.velocity.y);          
+                hasJumped = true;
+                canDoubleJump = true;
+            }
+            if(!grounded && canDoubleJump)
+            {
+                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpForce);
+                hasJumped = true;
+                jumpTimeCounter = jumpTime;
+                canDoubleJump = false;
+            }
         }
-        
+        if(Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+        {
+            if(jumpTimeCounter > 0 && hasJumped)
+            {
+                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpForce);
+                jumpTimeCounter -= Time.deltaTime;
+            }
+        }
+
+        if(Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0))
+        {
+            jumpTimeCounter = 0;
+            grounded = false;
+            hasJumped = false;
+        }
+
+        if(grounded)
+        {
+            jumpTimeCounter = jumpTime;
+        }
     }
 
     /**
@@ -66,5 +99,10 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("caught");
         }
+        if(other.gameObject.tag == "Coin")
+        {
+            Debug.Log("coin");
+        }
+
     }
 }
