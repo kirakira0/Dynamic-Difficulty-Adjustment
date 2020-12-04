@@ -8,24 +8,21 @@ public class PlatformGenerator2 : MonoBehaviour
     public GameObject[] PLATFORMS; 
     private int PLATFORM_SPEED = 5; 
     
-    // public void Generate(string type, string height) {
-    //     Instantiate(GetPlatformType(type), GetPlatformHeight(height), Quaternion.identity);
-    // }
+    /**
+    * Repeated platform generation occurs here.  
+    */ 
+    public IEnumerator GenerateSequence(List<Agent2.Platform> sequence) {
+        int sequenceIndex = 0; 
+        for (int i = 0; i < 10; i++) {
+            if (sequenceIndex >= sequence.Count) {sequenceIndex = 0;}
+            Generate(sequence[sequenceIndex]);
+            sequenceIndex++; 
+            yield return new WaitForSeconds(2f);
+        } 
+    }
 
     public void Generate(Agent2.Platform platform) {
         Instantiate(GetPlatformType(platform.GetType()), GetPlatformHeight(platform.GetHeight()), Quaternion.identity);
-    }
-
-    public void Print(Agent2.Platform platform) {
-        Debug.Log(platform.GetType());
-    }
-
-    // public void Generate(Platform platform) {
-    //     Instantiate(GetPlatformType(platform.GetPlatformType()), GetPlatformHeight(platform.GetPlatformHeight()), Quaternion.identity);
-    // }
-
-    public void GenerateSequence() {
-        
     }
 
     private GameObject GetPlatformType(string type) {

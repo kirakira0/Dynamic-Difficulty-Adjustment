@@ -8,7 +8,7 @@ public class Agent2 : MonoBehaviour
 
     void Start()
     {
-        PLATFORM_GENERATOR.Generate(new Agent2.Platform("med", "low"));
+        StartCoroutine(PLATFORM_GENERATOR.GenerateSequence(new List<Agent2.Platform>() {new Agent2.Platform("med", "low"), new Agent2.Platform("long", "low")}));
     }
 
     void Update()
