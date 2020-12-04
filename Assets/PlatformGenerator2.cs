@@ -7,17 +7,20 @@ public class PlatformGenerator2 : MonoBehaviour
     public Transform PLATFORM_GENERATION_POINT; 
     public GameObject[] PLATFORMS; 
     private int PLATFORM_SPEED = 5; 
+    public bool paused = false; 
     
     /**
     * Repeated platform generation occurs here.  
     */ 
     public IEnumerator GenerateSequence(List<Agent2.Platform> sequence) {
-        
+
         int sequenceIndex = 0; 
         for (int i = 0; i < 10; i++) {
-            if (sequenceIndex >= sequence.Count) {sequenceIndex = 0;}
-            Generate(sequence[sequenceIndex]);
-            sequenceIndex++; 
+            if (!paused) {
+                if (sequenceIndex >= sequence.Count) {sequenceIndex = 0;}
+                Generate(sequence[sequenceIndex]);
+                sequenceIndex++; 
+            }
             yield return new WaitForSeconds(2f);
         } 
     }

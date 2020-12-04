@@ -99,10 +99,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("caught");
         }
-        if(other.gameObject.tag == "Coin")
-        {
-            Debug.Log("coin");
-        }
+
 
     }
 }
