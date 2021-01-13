@@ -3,32 +3,20 @@ using System.Collections;
 
 public class FollowPlayer : MonoBehaviour {
 
-	public float interpVelocity;
-	public float minDistance;
-	public float followDistance;
-	public GameObject target;
-	public Vector3 offset;
-	Vector3 targetPos;
-	// Use this for initialization
-	void Start () {
-		targetPos = transform.position;
+	private float yThreshold;
+	public Transform player;
+  	public Vector3 offset;
+
+	void Awake() {
+		yThreshold = GameObject.Find("LowerCameraThreshold").transform.position.y;
 	}
-	
-	// Update is called once per frame
+
 	void FixedUpdate () {
-		if (target)
-		{
-			Vector3 posNoZ = transform.position;
-			posNoZ.z = target.transform.position.z;
-
-			Vector3 targetDirection = (target.transform.position - posNoZ);
-
-			interpVelocity = targetDirection.magnitude * 5f;
-
-			targetPos = transform.position + (targetDirection.normalized * interpVelocity * Time.deltaTime); 
-
-			transform.position = Vector3.Lerp( transform.position, targetPos + offset, 0.25f);
-
+		// Camera follows the player with specified offset position
+		if (player.position.y >= yThreshold) {
+			transform.position = new Vector3 (player.position.x + offset.x, player.position.y + offset.y, offset.z); 
+		} else {
+			transform.position = new Vector3 (player.position.x + offset.x, transform.position.y + offset.y, offset.z); 
 		}
 	}
 }

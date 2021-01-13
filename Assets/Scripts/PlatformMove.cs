@@ -14,6 +14,6 @@ public class PlatformMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position += Vector3.left * SPEED * Time.deltaTime;
+        // this.transform.position += Vector3.left * SPEED * Time.deltaTime;
     }
 }
