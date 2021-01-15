@@ -16,6 +16,11 @@ public class Puck : MonoBehaviour
     private Coroutine generateSequence; 
     private float acclimation = 0; 
 
+    private List<Puck.Platform> testSeq1;
+    private List<Puck.Platform> testSeq2;
+    private List<Puck.Platform> currentSequence;
+   
+
     public enum Height {
         low,
         mid,
@@ -27,35 +32,52 @@ public class Puck : MonoBehaviour
         platformGeneratorX = GameObject.Find("Camera/PlatformGenerationPoint").transform.position.x;
         platformGeneratorY = GameObject.Find("MidYPos").transform.position.y;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        // Define potential sequences. 
+        testSeq1 = new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
+        testSeq2 = new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.high), new Puck.Platform(longPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
+    
+        currentSequence = testSeq1;
     }
 
     void Update() {
-        // Ensures only one Coroutine is running at one time. 
         if (!corIsRunning && !player.IsPaused()) {
-            // generateSequence = StartCoroutine(Generate(medPlat, Height.mid));
-
-            generateSequence = StartCoroutine(GenerateSequence(new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)}));
-
-            // StartCoroutine(Generate(medPlat, Height.mid));
+            if (acclimation < 2.0f) {
+                // Player is not acclimated.
+                generateSequence = StartCoroutine(GenerateSequence(testSeq1));
+            } else {
+                // Once the player is acclimated.
+                acclimation = 0f; 
+                currentSequence = testSeq2;
+                generateSequence = StartCoroutine(GenerateSequence(testSeq2));
+            }
             corIsRunning = true;
         }
-        else if (player.IsPaused()) {
-            StopCoroutine(generateSequence);
-            corIsRunning = false;
+        if (player.IsPaused()) {
+            StopCoroutine(GenerateSequence(currentSequence));        
         }
+        // Debug.Log(acclimation);
     }
 
     IEnumerator GenerateSequence(List<Puck.Platform> sequence) {
         int sequenceIndex = 0; 
         for (int i = 0; i < 1000; i++) {
-            if (acclimation < 1f) {
+            // If the player has not yet acclimated, generate new platforms as expected.
+            if (acclimation < 2f && !player.IsPaused()) {
                 if (sequenceIndex >= sequence.Count) {
                     sequenceIndex = 0;
                 }
                 Instantiate(sequence[sequenceIndex].GetPlatformType(), GetSpawnPoint(sequence[sequenceIndex].GetHeight()), Quaternion.identity);
                 sequenceIndex++; 
+                acclimation += 0.25f; 
+                yield return new WaitForSeconds(1.3f);
+            } 
+            // If the player is acclimated, stop the coroutine. 
+            else {
+                corIsRunning = false;
+                // Debug.Log("STOP COROUTINE");
+                StopCoroutine(generateSequence);
             }
-            yield return new WaitForSeconds(1.3f);
         } 
     }
 
