@@ -12,18 +12,23 @@ public class Manager : MonoBehaviour
 
     private GameObject player;
     private Text livesText;
+    private Text coinsText;
     private PlayerMovement playerInfo;
+    private int coinsCollected; 
+    
 
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         livesText = GameObject.Find("LivesText").GetComponent<Text>();
+        coinsText = GameObject.Find("CoinsText").GetComponent<Text>();
         playerInfo = player.GetComponent<PlayerMovement>();
     }
 
     void Update()
     {
         livesText.text = "REMAINING LIVES: " + player.GetComponent<PlayerMovement>().GetRemainingLives().ToString();
+        coinsText.text = "COINS COLLECTED: " + coinsCollected;
         // What to do if the player falls off of the platforms
         // into the killzone.
         if (playerInfo.HasFallen()) {
@@ -45,4 +50,14 @@ public class Manager : MonoBehaviour
             }
         }
     }
+
+    // GETTERS 
+    // ---------------------------------
+    public int GetCoinsCollected() {return coinsCollected;}
+
+    // SETTERS 
+    // ---------------------------------
+    public void SetCoinsCollected(int n) {coinsCollected = n;}
+    public void IncrementCoinCount() {coinsCollected++;}
+
 }
