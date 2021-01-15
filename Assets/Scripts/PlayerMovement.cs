@@ -43,8 +43,6 @@ public class PlayerMovement : MonoBehaviour
     public float groundedRadius;
 
     private Animator myAnimator;
-
-    public GameManager gameManager;
     
 
 	void Awake ()

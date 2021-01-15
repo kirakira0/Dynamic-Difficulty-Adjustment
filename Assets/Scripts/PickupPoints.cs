@@ -7,15 +7,12 @@ public class PickupPoints : MonoBehaviour
 
     private Manager manager; 
     // private ScoreManager scoreManager;
-    private Agent Agent; 
     
 
 	// Use this for initialization
 	void Start () 
 	{
         manager = GameObject.Find("Manager").GetComponent<Manager>();
-        // scoreManager = FindObjectOfType<ScoreManager>();
-        // Agent = FindObjectOfType<Agent>(); 
 	}
 	
 	// Update is called once per frame

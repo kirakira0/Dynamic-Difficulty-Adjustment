@@ -20,7 +20,6 @@ public class Puck : MonoBehaviour
     private List<Puck.Platform> testSeq2;
     private List<Puck.Platform> currentSequence;
    
-
     public enum Height {
         low,
         mid,
@@ -35,7 +34,7 @@ public class Puck : MonoBehaviour
 
         // Define potential sequences. 
         testSeq1 = new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
-        testSeq2 = new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.high), new Puck.Platform(longPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
+        testSeq2 = new List<Puck.Platform>() {new Puck.Platform(longPlat, Height.low),new Puck.Platform(medPlat, Height.high), new Puck.Platform(longPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
     
         currentSequence = testSeq1;
     }
@@ -96,10 +95,10 @@ public class Puck : MonoBehaviour
                 spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY, 0); 
                 break;
             case Height.high:
-                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
+                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 2, 0); 
                 break;
             default:
-                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
+                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY, 0); 
                 break;
         }
         return spawnPoint;

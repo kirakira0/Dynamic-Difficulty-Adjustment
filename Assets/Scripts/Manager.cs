@@ -15,6 +15,7 @@ public class Manager : MonoBehaviour
     private PlayerMovement playerInfo;
     private int coinsCollected; 
     
+    
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
