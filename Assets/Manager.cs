@@ -5,24 +5,23 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    // public PlayerMovement player;
     public GameObject startingPlatform;
-    public Transform startingPlatformPoint;
     public Transform startingPlayerPoint;
 
+    private float MID_Y_POS; 
     private GameObject player;
     private Text livesText;
     private Text coinsText;
     private PlayerMovement playerInfo;
     private int coinsCollected; 
     
-
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         livesText = GameObject.Find("LivesText").GetComponent<Text>();
         coinsText = GameObject.Find("CoinsText").GetComponent<Text>();
         playerInfo = player.GetComponent<PlayerMovement>();
+        MID_Y_POS = GameObject.Find("MidYPos").transform.position.y;
     }
 
     void Update()
@@ -44,9 +43,10 @@ public class Manager : MonoBehaviour
 
             } else {
                 // Reset platforms. 
-                Instantiate(startingPlatform, new Vector3(startingPlatformPoint.position.x, startingPlatformPoint.position.y, 0), Quaternion.identity);
-                playerInfo.SetPlayerPosition(new Vector3(startingPlayerPoint.transform.position.x, startingPlayerPoint.transform.position.y, 0));
+                Instantiate(startingPlatform, new Vector3(startingPlayerPoint.transform.position.x, MID_Y_POS - 1, 0), Quaternion.identity);
+                playerInfo.SetPlayerPosition(new Vector3(startingPlayerPoint.transform.position.x, MID_Y_POS + 1, 0));
                 playerInfo.SetHasFallen(false);
+                playerInfo.SetPaused(true);
             }
         }
     }

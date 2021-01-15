@@ -4,12 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour 
 {
-
-    public string playGameLevel;
-
 	public void PlayGame()
     {
-        SceneManager.LoadScene(playGameLevel);
+        SceneManager.LoadScene("RunnerRoom");
     }
 
     public void QuitGame()

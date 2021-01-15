@@ -11,11 +11,12 @@ public class Puck : MonoBehaviour
     
     private float platformGeneratorX; 
     private float platformGeneratorY; 
-    private Vector3 lowPoint;
-    private Vector3 midPoint;
-    private Vector3 highPoint;
+    private PlayerMovement player;
+    private bool corIsRunning = false; 
+    private Coroutine generateSequence; 
+    private float acclimation = 0; 
 
-    private enum Height {
+    public enum Height {
         low,
         mid,
         high,
@@ -24,46 +25,83 @@ public class Puck : MonoBehaviour
     void Awake()
     {
         platformGeneratorX = GameObject.Find("Camera/PlatformGenerationPoint").transform.position.x;
-        platformGeneratorY = GameObject.Find("Camera/PlatformGenerationPoint").transform.position.y;
-
-        // UpdateCoordinates();
-        // StartCoroutine(Generate(shortPlat, highPoint));
-        StartCoroutine(Generate(shortPlat, Height.high));
-
- 
-
+        platformGeneratorY = GameObject.Find("MidYPos").transform.position.y;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    void Update() {
+        // Ensures only one Coroutine is running at one time. 
+        if (!corIsRunning && !player.IsPaused()) {
+            // generateSequence = StartCoroutine(Generate(medPlat, Height.mid));
+
+            generateSequence = StartCoroutine(GenerateSequence(new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)}));
+
+            // StartCoroutine(Generate(medPlat, Height.mid));
+            corIsRunning = true;
+        }
+        else if (player.IsPaused()) {
+            StopCoroutine(generateSequence);
+            corIsRunning = false;
+        }
     }
 
-    void UpdateCoordinates() {
-        platformGeneratorX = GameObject.Find("Camera/PlatformGenerationPoint").transform.position.x;
-        lowPoint = new Vector3(platformGeneratorX, platformGeneratorY - 3, 0); 
-        midPoint = new Vector3(platformGeneratorX, platformGeneratorY, 0);
-        highPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
-    }
-
-    IEnumerator Generate(GameObject platform, Height height) {
-        for (int i = 0; i < 100; i++) {
-            yield return new WaitForSeconds(1f);
-
-            Vector3 spawnPoint;
-
-            platformGeneratorX = GameObject.Find("Camera/PlatformGenerationPoint").transform.position.x;
-
-            if (height == Height.high) {
-                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
-            } else {
-                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
+    IEnumerator GenerateSequence(List<Puck.Platform> sequence) {
+        int sequenceIndex = 0; 
+        for (int i = 0; i < 1000; i++) {
+            if (acclimation < 1f) {
+                if (sequenceIndex >= sequence.Count) {
+                    sequenceIndex = 0;
+                }
+                Instantiate(sequence[sequenceIndex].GetPlatformType(), GetSpawnPoint(sequence[sequenceIndex].GetHeight()), Quaternion.identity);
+                sequenceIndex++; 
             }
-
-
-            // UpdateCoordinates();
-            // Debug.Log(spawnPoint);
-            Instantiate(platform, spawnPoint, Quaternion.identity);
+            yield return new WaitForSeconds(1.3f);
         } 
+    }
+
+    /**
+     * Helper method that identifies the spawn point at which new platforms 
+     * should be generated. 
+     */ 
+    private Vector3 GetSpawnPoint(Height height) {
+        Vector3 spawnPoint;
+        platformGeneratorX = GameObject.Find("Camera/PlatformGenerationPoint").transform.position.x;
+        switch (height) {
+            case Height.low:
+                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY - 3, 0); 
+                break;
+            case Height.mid:
+                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY, 0); 
+                break;
+            case Height.high:
+                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
+                break;
+            default:
+                spawnPoint = new Vector3(platformGeneratorX, platformGeneratorY + 3, 0); 
+                break;
+        }
+        return spawnPoint;
+    }
+
+    // SUBCLASSES
+    // ------------------------------------------------------------------------
+
+    public class Platform {
+
+        private GameObject type;
+        private Height height; 
+
+        public Platform(GameObject type, Height height) {
+            this.type = type;
+            this.height = height; 
+        }
+
+        public GameObject GetPlatformType() {
+            return this.type;
+        }
+
+        public Height GetHeight() {
+            return this.height;
+        }
     }
 }

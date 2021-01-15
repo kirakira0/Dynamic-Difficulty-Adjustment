@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,19 +11,16 @@ public class PlayerMovement : MonoBehaviour
 
     // CHANGING VARIABLES
     // --------------------------------------------------------------
-    private float playerSpeed;
+    private float playerSpeed = 0;
     private int remainingLives;
     private bool fallen;
+    private bool paused = true;
 
-    public GameObject FADE;
+        //------------------------------
 
-    public PlatformGenerator2 PLATFORM_GENERATOR; 
     public Transform PLAYER_SPAWN_POINT;
     public Transform STARTING_PLATFORM_SPAWN_POINT; 
     public GameObject STARTING_PLATFORM; 
-
-
-    private float GRAVITY_FLOAT = 3;
 
     public int lives = 3;
     public GameObject spawnPoint; 
@@ -53,8 +51,6 @@ public class PlayerMovement : MonoBehaviour
     {
         remainingLives = TOTAL_LIVES;
         fallen = false;
-        playerSpeed = NORMAL_MOVE_SPEED;
-
 
         playerRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
@@ -62,24 +58,17 @@ public class PlayerMovement : MonoBehaviour
         hasJumped = false;
     }
 
-    // public void findPlatform() {
-    //     moveSpeed = 0;  
-    //     transform.position = new Vector3(transform.position.x, transform.position.y + 9.0f, 0);
-    //     playerRigidbody.gravityScale = 0;
-    //     while (playerRigidbody.gravityScale == 0) {
-    //         Vector2 position = transform.position;
-    //         Vector2 direction = transform.TransformDirection(Vector2.down);
-    //         RaycastHit2D hit = Physics2D.Raycast(position, direction, 1000f);
-    //         if (hit.collider.tag == "Platform") {
-    //             playerRigidbody.gravityScale = GRAVITY_FLOAT;
-    //         } else {
-    //             playerRigidbody.position = new Vector2(playerRigidbody.position.x + 0.1f, playerRigidbody.position.y);            
-    //         }
-    //     }
-    // }
-	
 	void Update ()
     {
+        if (paused && Input.GetKeyDown(KeyCode.V)) {
+            paused = false;
+        }
+
+        if (paused) {
+            playerSpeed = 0;
+        } else {
+            playerSpeed = NORMAL_MOVE_SPEED;
+        }
 
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundedRadius, whatIsGround);
 
@@ -129,6 +118,13 @@ public class PlayerMovement : MonoBehaviour
             SetPlayerSpeed(0);
         }
 
+        // IS DEAD
+        if (IsDead()) {
+            Debug.Log("Player is dead.");
+            SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
+            remainingLives = 3; 
+        }
+
         // myAnimator.SetFloat("Speed", playerRigidbody.velocity.x);
         // myAnimator.SetBool("Grounded", grounded);
 	}
@@ -136,38 +132,17 @@ public class PlayerMovement : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     { 
         if(other.gameObject.tag == "killbox") {
-            Debug.Log("player has fallen");
+            Debug.Log("Player has fallen.");
             fallen = true;
-
-            // canDoubleJump = true;
-            // PLATFORM_GENERATOR.paused = true; 
-            // FADE.SetActive(true);
-            // StartCoroutine(ExecuteAfterTime(5f));
         }
-
-        // if(other.gameObject.tag == "killbox")
-        // {
-        //     Debug.Log("caught");
-        //     this.lives--;
-        //     if (this.lives <= 0) {
-        //         gameManager.RestartGame();
-        //     } else {
-        //         inDeathcatcher = true;
-        //         // this.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, 0);
-        //         // canDoubleJump = true;
-        //     }
-        // }
     }
 
-    IEnumerator ExecuteAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Instantiate(STARTING_PLATFORM, new Vector3(STARTING_PLATFORM_SPAWN_POINT.transform.position.x, STARTING_PLATFORM_SPAWN_POINT.transform.position.y, 0), Quaternion.identity);
-        transform.position = new Vector3(PLAYER_SPAWN_POINT.transform.position.x, PLAYER_SPAWN_POINT.transform.position.y, 0);
-        PLATFORM_GENERATOR.paused = false; 
-        FADE.SetActive(false);
-
-    }
+    // IEnumerator ExecuteAfterTime(float time)
+    // {
+    //     yield return new WaitForSeconds(time);
+    //     Instantiate(STARTING_PLATFORM, new Vector3(STARTING_PLATFORM_SPAWN_POINT.transform.position.x, MID_Y_POS, 0), Quaternion.identity);
+    //     transform.position = new Vector3(PLAYER_SPAWN_POINT.transform.position.x, MID_Y_POS + 2, 0);
+    // }
 
     public void DecrementRemainingLives() {
         remainingLives--;
@@ -179,11 +154,13 @@ public class PlayerMovement : MonoBehaviour
     public int GetRemainingLives() {return remainingLives;}
     public bool HasFallen() {return fallen;}
     public bool IsDead() {return remainingLives < 1;}
+    public bool IsPaused() {return paused;}
 
     // SETTERS
     // --------------------------------------------------------------
     public void SetHasFallen(bool value) {fallen = value;}
     public void SetPlayerSpeed(int speed) {playerSpeed = speed;}
     public void SetPlayerPosition(Vector3 position) {this.transform.position = position;}
+    public void SetPaused(bool v) {paused = v;}
 
 }
