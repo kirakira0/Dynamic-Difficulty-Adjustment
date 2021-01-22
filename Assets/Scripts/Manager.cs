@@ -9,6 +9,7 @@ public class Manager : MonoBehaviour
     public Transform startingPlayerPoint;
     public Canvas deathScreen;
     public Text feedbackText;
+    public Web webRequest;
 
     private float MID_Y_POS; 
     private GameObject player;
@@ -50,6 +51,8 @@ public class Manager : MonoBehaviour
             if (playerInfo.IsDead()) {
                 feedbackText.text = "You collected a cumulative total of " + coinsCollected + " coins and acclimated to 0 subpolicies.";
                 deathScreen.gameObject.SetActive(true);
+                StartCoroutine(webRequest.GetComponent<Web>().RegisterPlayer("test #8"));
+                // webRequest.StartCoroutine(RegisterPlayer(registerPlayerURL, "test #8"));
             } else {
 
             }

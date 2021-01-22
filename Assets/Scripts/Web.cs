@@ -12,10 +12,15 @@ public class Web : MonoBehaviour
     void Start() {
         // StartCoroutine(GetData(dateURL));
         // StartCoroutine(GetData(usersURL));
-        StartCoroutine(RegisterPlayer(registerPlayerURL, "test #4"));
+        // StartCoroutine(RegisterPlayer(registerPlayerURL, "test #7"));
     }
 
-    IEnumerator GetData(string URL) {
+    // public IEnumerator Hi() {
+    //     yield return new WaitForSeconds(1.3f);
+    //     Debug.Log("hi");
+    // }
+
+    public IEnumerator GetData(string URL) {
         using (UnityWebRequest www = UnityWebRequest.Get(URL)) {
             //yield return www.Send();
             yield return www.SendWebRequest();
@@ -30,11 +35,11 @@ public class Web : MonoBehaviour
         }
     }
 
-    IEnumerator RegisterPlayer(string URL, string userIp) {
+    public IEnumerator RegisterPlayer(string userIp) {
         WWWForm form = new WWWForm();
         form.AddField("userIp", userIp);
         
-        using (UnityWebRequest www = UnityWebRequest.Post(URL, form)) {
+        using (UnityWebRequest www = UnityWebRequest.Post(registerPlayerURL, form)) {
             yield return www.SendWebRequest();
             if (www.isNetworkError || www.isHttpError) {
                 Debug.Log(www.error);
