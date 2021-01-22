@@ -30,6 +30,10 @@ public class Manager : MonoBehaviour
 
     void Update()
     {
+        // if (Input.GetKeyDown(KeyCode.B)) {
+        //     StartCoroutine(webRequest.GetComponent<Web>().RegisterPlayer("ipAddress", coinsCollected));
+        // }
+
         livesText.text = "REMAINING LIVES: " + player.GetComponent<PlayerMovement>().GetRemainingLives().ToString();
         coinsText.text = "COINS COLLECTED: " + coinsCollected;
         // What to do if the player falls off of the platforms
@@ -51,8 +55,7 @@ public class Manager : MonoBehaviour
             if (playerInfo.IsDead()) {
                 feedbackText.text = "You collected a cumulative total of " + coinsCollected + " coins and acclimated to 0 subpolicies.";
                 deathScreen.gameObject.SetActive(true);
-                StartCoroutine(webRequest.GetComponent<Web>().RegisterPlayer("test #8"));
-                // webRequest.StartCoroutine(RegisterPlayer(registerPlayerURL, "test #8"));
+                StartCoroutine(webRequest.GetComponent<Web>().RegisterPlayer("ipAddress", coinsCollected));
             } else {
 
             }

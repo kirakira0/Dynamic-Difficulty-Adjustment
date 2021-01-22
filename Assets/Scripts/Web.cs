@@ -7,18 +7,6 @@ public class Web : MonoBehaviour
     string dateURL = "http://localhost:8080/DDA/GetDate.php";
     string usersURL = "http://localhost:8080/DDA/GetUsers.php";
     string registerPlayerURL = "http://localhost:8080/DDA/RegisterUser.php";
-    
-    // Use coroutine b/c we need to wait for a reply from the server (can't be done in 1 frame).
-    void Start() {
-        // StartCoroutine(GetData(dateURL));
-        // StartCoroutine(GetData(usersURL));
-        // StartCoroutine(RegisterPlayer(registerPlayerURL, "test #7"));
-    }
-
-    // public IEnumerator Hi() {
-    //     yield return new WaitForSeconds(1.3f);
-    //     Debug.Log("hi");
-    // }
 
     public IEnumerator GetData(string URL) {
         using (UnityWebRequest www = UnityWebRequest.Get(URL)) {
@@ -35,9 +23,10 @@ public class Web : MonoBehaviour
         }
     }
 
-    public IEnumerator RegisterPlayer(string userIp) {
+    public IEnumerator RegisterPlayer(string userIp, int score) {
         WWWForm form = new WWWForm();
         form.AddField("userIp", userIp);
+        form.AddField("score", score);
         
         using (UnityWebRequest www = UnityWebRequest.Post(registerPlayerURL, form)) {
             yield return www.SendWebRequest();
