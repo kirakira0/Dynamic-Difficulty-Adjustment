@@ -118,8 +118,8 @@ public class PlayerMovement : MonoBehaviour
 
         // IS DEAD
         if (IsDead()) {
-            Debug.Log("Player is dead.");
-            SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
+            // Debug.Log("Player is dead.");
+            // SceneManager.LoadScene("Main Menu", LoadSceneMode.Additive);
             remainingLives = 3; 
         }
 

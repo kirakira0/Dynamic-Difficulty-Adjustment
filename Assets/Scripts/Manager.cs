@@ -7,6 +7,8 @@ public class Manager : MonoBehaviour
 {
     public GameObject startingPlatform;
     public Transform startingPlayerPoint;
+    public Canvas deathScreen;
+    public Text feedbackText;
 
     private float MID_Y_POS; 
     private GameObject player;
@@ -40,14 +42,16 @@ public class Manager : MonoBehaviour
             foreach(GameObject platform in platforms) {
                 GameObject.Destroy(platform);
             }
+            // Reset platforms. 
+            Instantiate(startingPlatform, new Vector3(startingPlayerPoint.transform.position.x, MID_Y_POS - 1, 0), Quaternion.identity);
+            playerInfo.SetPlayerPosition(new Vector3(startingPlayerPoint.transform.position.x, MID_Y_POS + 1, 0));
+            playerInfo.SetHasFallen(false);
+            playerInfo.SetPaused(true);
             if (playerInfo.IsDead()) {
-
+                feedbackText.text = "You collected a cumulative total of " + coinsCollected + " coins and acclimated to 0 subpolicies.";
+                deathScreen.gameObject.SetActive(true);
             } else {
-                // Reset platforms. 
-                Instantiate(startingPlatform, new Vector3(startingPlayerPoint.transform.position.x, MID_Y_POS - 1, 0), Quaternion.identity);
-                playerInfo.SetPlayerPosition(new Vector3(startingPlayerPoint.transform.position.x, MID_Y_POS + 1, 0));
-                playerInfo.SetHasFallen(false);
-                playerInfo.SetPaused(true);
+
             }
         }
     }
