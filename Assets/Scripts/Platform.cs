@@ -23,4 +23,16 @@ public class Platform {
         return this.height;
     }
 
+    public int getNumCoins() {
+        switch (this.width) {
+            case Width.Short:
+                return 3;
+            case Width.Medium:
+                return 5;
+            case Width.Long:
+                return 7; 
+            default:
+                return -1;
+        }
+    }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlatformDestroyer : MonoBehaviour
 {
-    public GameObject platformDestructionPoint;
+    private GameObject platformDestructionPoint;
 
 	void Start ()
     {

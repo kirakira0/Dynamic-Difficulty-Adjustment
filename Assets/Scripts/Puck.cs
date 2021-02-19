@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; 
 
 public class Puck : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Puck : MonoBehaviour
     public GameObject shortPlat;
     public GameObject medPlat;
     public GameObject longPlat;
+    public Text subpolicyText;
     
     private float platformGeneratorX; 
     private float platformGeneratorY; 
@@ -35,7 +37,6 @@ public class Puck : MonoBehaviour
         // Define potential sequences. 
         testSeq1 = new List<Puck.Platform>() {new Puck.Platform(medPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
         testSeq2 = new List<Puck.Platform>() {new Puck.Platform(longPlat, Height.low),new Puck.Platform(medPlat, Height.high), new Puck.Platform(longPlat, Height.low), new Puck.Platform(shortPlat, Height.mid)};
-    
         currentSequence = testSeq1;
     }
 
@@ -44,8 +45,10 @@ public class Puck : MonoBehaviour
             if (acclimation < 2.0f) {
                 // Player is not acclimated.
                 generateSequence = StartCoroutine(GenerateSequence(testSeq1));
+                subpolicyText.text = "CURRENT SUBPOLICY: " + "ML, SM";
             } else {
                 // Once the player is acclimated.
+                subpolicyText.text = "CURRENT SUBPOLICY: " + "LL, MH, LL, SM" + "\n" + "SWITCH FROM [SPB1] TO [SPB2]";
                 acclimation = 0f; 
                 currentSequence = testSeq2;
                 generateSequence = StartCoroutine(GenerateSequence(testSeq2));
@@ -102,6 +105,10 @@ public class Puck : MonoBehaviour
                 break;
         }
         return spawnPoint;
+    }
+
+    public List<Puck.Platform> GetCurrentSequence() {
+        return currentSequence;
     }
 
     // SUBCLASSES

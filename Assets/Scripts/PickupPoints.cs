@@ -9,26 +9,26 @@ public class PickupPoints : MonoBehaviour
     // private ScoreManager scoreManager;
     
 
-	// Use this for initialization
-	void Start () 
-	{
-        manager = GameObject.Find("Manager").GetComponent<Manager>();
-	}
+	// // Use this for initialization
+	// void Start () 
+	// {
+    //     manager = GameObject.Find("Manager").GetComponent<Manager>();
+	// }
 	
-	// Update is called once per frame
-	void Update () 
-	{
+	// // Update is called once per frame
+	// void Update () 
+	// {
 
-	}
+	// }
 
-    //Increase score when coins are collected
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.gameObject.name == "Player")
-        {
-            manager.IncrementCoinCount();
-            // scoreManager.AddScore(scoreToGive);
-            gameObject.SetActive(false);
-        }
-    }
+    // //Increase score when coins are collected
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if(other.gameObject.name == "Player")
+    //     {
+    //         manager.IncrementCoinCount();
+    //         // scoreManager.AddScore(scoreToGive);
+    //         gameObject.SetActive(false);
+    //     }
+    // }
 }
