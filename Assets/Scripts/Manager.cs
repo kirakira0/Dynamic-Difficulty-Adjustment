@@ -13,17 +13,18 @@ public class Manager : MonoBehaviour
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
     }
 
-    void Update() {
-        try {
-            metricsText.text = "SUBPOLICY: " + LOGGER.sbpStack.Peek().GetStringRepresentation() + 
-                            "\nWINDOWS GENERATED: " + LOGGER.sbpStack.Peek().getWindows();
-        } catch {
-            metricsText.text = "SUBPOLICY: "  + 
-                            "\nWINDOWS GENERATED: ";
-        }
-    
+    // void Update() {
+    //     // Debug.Log(LOGGER.sbpStack.Count);
+    //     // try {
+    //     if (LOGGER.sbpStack.Count == 0) {
+    //         metricsText.text = "SUBPOLICY: "  + 
+    //                         "\nWINDOWS GENERATED: ";
+    //     } else {
+    //         metricsText.text = "SUBPOLICY: " + LOGGER.sbpStack.Peek().GetStringRepresentation() + 
+    //                         "\nWINDOWS GENERATED: " + LOGGER.sbpStack.Peek().getWindows();
+    //     }
 
-    }
+    // }
 
     // public GameObject startingPlatform;
     // public Transform startingPlayerPoint;

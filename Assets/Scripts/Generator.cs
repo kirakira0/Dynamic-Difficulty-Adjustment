@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; 
 
 /**
  * Generates the platforms using input from the agent.
@@ -12,6 +13,7 @@ public class Generator : MonoBehaviour
     public GameObject shortPlatform;
     public GameObject mediumPlatform;
     public GameObject longPlatform;
+    public Text subpolicyText;
 
     private Agent AGENT;
     private Logger LOGGER; 
@@ -19,15 +21,20 @@ public class Generator : MonoBehaviour
     void Awake() {
         AGENT = GameObject.Find("Agent").GetComponent<Agent>(); 
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
+        LOGGER.Start();
     }
 
 
     public IEnumerator GenerateSequence(Subpolicy sbp) {
         // Add sequence to the logger.
-        Debug.Log(sbp.GetStringRepresentation());
         
-        LOGGER.sbpQueue.Enqueue(sbp); 
+        LOGGER.AddSubpolicy(sbp);
         LOGGER.sbpStack.Push(sbp); 
+        
+        // string s = sbp.GetStringRepresentation();
+        // Debug.Log(s);
+        // subpolicyText.text = s;
+
         // Repeated platform generation while player is not acclimated. 
         List<Platform> sequence = sbp.getSequence();
         while (!AGENT.getIsAcclimated()) {
@@ -52,5 +59,15 @@ public class Generator : MonoBehaviour
         else { yOffset = 1; }
 
         Instantiate(type, new Vector3(platformGenerationPoint.position.x, platformGenerationPoint.position.y + yOffset, 0), Quaternion.identity);
+    }
+
+    void Update() {
+        // if (LOGGER.sbpStack.Count == 0) {
+        //     subpolicyText.text = "SUBPOLICY: "  + 
+        //                     "\nWINDOWS GENERATED: ";
+        // } else {
+        //     subpolicyText.text = "SUBPOLICY: " + LOGGER.sbpStack.Peek().GetStringRepresentation() + 
+        //                     "\nWINDOWS GENERATED: " + LOGGER.sbpStack.Peek().getWindows();
+        // }
     }
 }

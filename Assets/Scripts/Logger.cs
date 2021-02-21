@@ -19,4 +19,8 @@ public class Logger : MonoBehaviour
     {
 
     }
+
+    public void AddSubpolicy(Subpolicy sbp) {
+        sbpStack.Push(sbp);
+    }
 }
