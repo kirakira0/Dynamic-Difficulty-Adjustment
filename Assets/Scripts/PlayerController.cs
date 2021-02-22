@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         }
    
         if(Input.GetKeyDown(KeyCode.Space) && consecutiveJumps < 2 && !Manager.GetPaused()) {
-            consecutiveJumps++; 
+            // consecutiveJumps++; 
 
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0); 
             
@@ -43,8 +43,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // Stop moving upwards on key jumps: lets player make shorter jumps. 
-        if(Input.GetKeyUp(KeyCode.Space)) {
+        if(Input.GetKeyUp(KeyCode.Space) && consecutiveJumps < 2 && !Manager.GetPaused()) {
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0); 
+                        consecutiveJumps++; 
+
         }
     }
 
