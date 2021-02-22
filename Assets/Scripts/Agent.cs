@@ -9,27 +9,43 @@ public class Agent : MonoBehaviour
 
     private Coroutine generateSequence;
     private bool acclimated = false; 
-    private Logger LOGGER;
+    private Logger Logger;
+    private Manager Manager; 
 
     // Start is called before the first frame update
     void Start()
     {
-        LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
-        LOGGER.Start();
+        Logger = GameObject.Find("Logger").GetComponent<Logger>(); 
+        Manager = GameObject.Find("Manager").GetComponent<Manager>();
+        Logger.Start();
 
-        List<Platform> sqn1 = new List<Platform>() {
-            new Platform(Width.Medium, Height.Low),
-            new Platform(Width.Short, Height.High),
-            new Platform(Width.Long, Height.Middle)
-        };  
 
-        // sqn1.Add(new Platform(Width.Short, Height.Middle));
-        Subpolicy sbp1 = new Subpolicy(sqn1);
-
-        generateSequence = StartCoroutine(platformGenerator.GenerateSequence(sbp1));
-        Debug.Log("AGENT STARTS COUROUTINE");
 
         // platformGenerator.GenerateSequence(sbp1);
+    }
+
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.Return)) {
+
+            Manager.SetPaused(false);
+            
+            List<Platform> sqn1 = new List<Platform>() {
+                new Platform(Width.Medium, Height.Low),
+                new Platform(Width.Short, Height.High),
+                new Platform(Width.Long, Height.Middle)
+            };  
+
+            // sqn1.Add(new Platform(Width.Short, Height.Middle));
+            Subpolicy sbp1 = new Subpolicy(sqn1);
+
+            generateSequence = StartCoroutine(platformGenerator.GenerateSequence(sbp1));
+            Debug.Log("AGENT STARTS COUROUTINE");
+        }
+
+    }
+
+    public void StopGeneration() {
+        StopCoroutine(generateSequence);
     }
 
     public bool getIsAcclimated() {

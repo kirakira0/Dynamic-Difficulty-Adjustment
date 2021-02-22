@@ -48,7 +48,7 @@ public class Generator : MonoBehaviour
 
     public void GeneratePlatform(Platform platform) {
         GameObject type; 
-        Debug.Log(platform.getWidth());
+        // Debug.Log(platform.getWidth());
         if (platform.getWidth() == Width.Short) { type = shortPlatform; }
         else if (platform.getWidth() == Width.Medium) { type = mediumPlatform; }
         else { type = longPlatform; }
@@ -60,6 +60,8 @@ public class Generator : MonoBehaviour
 
         Instantiate(type, new Vector3(platformGenerationPoint.position.x, platformGenerationPoint.position.y + yOffset, 0), Quaternion.identity);
     }
+
+
 
     void Update() {
         // if (LOGGER.sbpStack.Count == 0) {

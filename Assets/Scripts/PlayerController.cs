@@ -9,15 +9,19 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 0.01f;
     public LayerMask whatIsGround;
     public float groundedRadius;
+    public int remainingLives = 3; 
 
     private Rigidbody2D rigidbody;
     private Transform groundCheck;
+    private Manager Manager; 
+
     private bool grounded;
-    private int consecutiveJumps = 0; 
+    private int consecutiveJumps = 0;
 
     void Awake() {
         rigidbody = GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("Player/GroundCheck").GetComponent<Transform>();
+        Manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
 	void Update() {
@@ -28,7 +32,7 @@ public class PlayerController : MonoBehaviour
             consecutiveJumps = 0; 
         }
    
-        if(Input.GetKeyDown(KeyCode.Space) && consecutiveJumps < 2) {
+        if(Input.GetKeyDown(KeyCode.Space) && consecutiveJumps < 2 && !Manager.GetPaused()) {
             consecutiveJumps++; 
 
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0); 
@@ -43,4 +47,21 @@ public class PlayerController : MonoBehaviour
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0); 
         }
     }
+
+    void OnCollisionEnter2D(Collision2D other)
+    { 
+        if(other.gameObject.tag == "killbox") {
+            remainingLives--;
+            if (remainingLives > 0) {
+                Manager.HandleFall(); 
+            } else {
+                Manager.HandleDeath(); 
+            }
+        }
+    }
+
+    public void SetPlayerPosition(Vector3 position) {this.transform.position = position;}
+
+    public Vector3 GetPlayerTransform() {return this.transform.position;}
+
 }
