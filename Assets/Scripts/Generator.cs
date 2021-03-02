@@ -50,12 +50,17 @@ public class Generator : MonoBehaviour
                 }
             }
             // Acclimation calculations ...
-            // Keep length to 5
-            if (Agent.scores.Count > 4) {
-                Agent.scores.Dequeue(); 
-            }
             // Get standard deviation 
-            Agent.scoreSD = Agent.CalculateStandardDeviation(); 
+            Agent.scoreSD = Agent.CalculateStandardDeviation();
+            // Keep length to 5
+            if (Agent.scores.Count > 2) {
+                Agent.scores.Dequeue();
+                // IF ACCLIMATED.
+                if (Agent.scoreSD < 0.2) {
+                    Agent.acclimated = true;
+                    Agent.NextPolicy();  
+                } 
+            } 
             // Add new value
             Agent.scores.Enqueue((float)Agent.GetCoinsCollected()/sbp.GetTotalCoins());
             // Reset coins collected.
@@ -81,17 +86,5 @@ public class Generator : MonoBehaviour
 
     public void StopGeneration() {
         StopCoroutine("GenerateSequence");
-    }
-
-
-
-    void Update() {
-        // if (LOGGER.sbpStack.Count == 0) {
-        //     subpolicyText.text = "SUBPOLICY: "  + 
-        //                     "\nWINDOWS GENERATED: ";
-        // } else {
-        //     subpolicyText.text = "SUBPOLICY: " + LOGGER.sbpStack.Peek().GetStringRepresentation() + 
-        //                     "\nWINDOWS GENERATED: " + LOGGER.sbpStack.Peek().getWindows();
-        // }
     }
 }

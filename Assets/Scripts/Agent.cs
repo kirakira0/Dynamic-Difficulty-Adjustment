@@ -9,7 +9,7 @@ public class Agent : MonoBehaviour
     public Generator platformGenerator; 
 
     private Coroutine generateSequence;
-    private bool acclimated = false; 
+    public bool acclimated = false; 
     private int coinsCollected = 0;
     public Queue<float> scores = new Queue<float>();
     public float scoreSD = 1;  
@@ -22,6 +22,7 @@ public class Agent : MonoBehaviour
     private Subpolicy sbp3;
     private Subpolicy currentSubpolicy; 
     private List<Subpolicy> sbpList; 
+    private int policyIndex = 0; 
 
 
     // Start is called before the first frame update
@@ -53,28 +54,19 @@ public class Agent : MonoBehaviour
         };  
         sbp3 = new Subpolicy(sqn3);
 
-        currentSubpolicy = sbp1;
-
+        // currentSubpolicy = sbp1;
         List<Subpolicy> sbpList = new List<Subpolicy>() { sbp1, sbp2, sbp3 };
+        currentSubpolicy = sbpList[policyIndex];
 
     }
 
     void Update() {
+
         // Handle game pause.
         if (Manager.GetPaused()) {
             // StopGeneration();
         }
 
-        // Handle jump.
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            currentSubpolicy = sbp1;
-        } 
-        else if (Input.GetKeyDown(KeyCode.W)) {
-            currentSubpolicy = sbp2;
-        }
-        else if (Input.GetKeyDown(KeyCode.E)) {
-            currentSubpolicy = sbp3;
-        }
 
         if(Input.GetKeyDown(KeyCode.Return) && Manager.GetPaused()) {
             Manager.SetPaused(false);
@@ -146,5 +138,29 @@ public class Agent : MonoBehaviour
         float meanOfSquares = (float)sumOfSquares/squaredDifferences.Count; 
         // Return square root of mean of squares. 
         return (float)Math.Pow(meanOfSquares, 0.5);       
+    }
+
+    /**
+     * Called when player has acclimated. 
+     */ 
+    public void NextPolicy() {
+                
+        policyIndex++; 
+        
+        if (policyIndex % 3 == 0) {
+            currentSubpolicy = sbp1; 
+        } else if (policyIndex % 3 == 1) {
+            currentSubpolicy = sbp2; 
+        } else {
+            currentSubpolicy = sbp3; 
+        }       
+
+        Debug.Log("ACCLIMATED");
+
+        StopCoroutine(generateSequence);
+        this.acclimated = false;
+        this.scores.Clear();
+        this.scoreSD = 1;   
+        generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentSubpolicy));
     }
 }
