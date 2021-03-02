@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI; 
 
 /**
- * Generates the platforms using input from the agent.
+ * Generates the platforms using input from the Agent.
  */
 
 public class Generator : MonoBehaviour
@@ -16,12 +16,12 @@ public class Generator : MonoBehaviour
     public Text subpolicyText;
     public bool generatorRunning = false;
 
-    private Agent AGENT;
+    private Agent Agent;
     private Logger LOGGER; 
     private Manager Manager; 
 
     void Awake() {
-        AGENT = GameObject.Find("Agent").GetComponent<Agent>(); 
+        Agent = GameObject.Find("Agent").GetComponent<Agent>(); 
         Manager = GameObject.Find("Manager").GetComponent<Manager>(); 
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
         LOGGER.Start();
@@ -42,13 +42,15 @@ public class Generator : MonoBehaviour
 
         // Repeated platform generation while player is not acclimated. 
         List<Platform> sequence = sbp.getSequence();
-        while (!AGENT.GetIsAcclimated() && !Manager.GetPaused()) {
+        while (!Agent.GetIsAcclimated() && !Manager.GetPaused()) { 
             for (int i = 0; i < sequence.Count; i++) {
                 if (!Manager.GetPaused()) {
                     GeneratePlatform(sequence[i]);
                     yield return new WaitForSeconds(1.6f);
                 }
-            } 
+            }
+            // Reset coins collected.
+            Agent.ResetCoinsCollected(); 
             sbp.IncrementWindowCount();
         }
     }
