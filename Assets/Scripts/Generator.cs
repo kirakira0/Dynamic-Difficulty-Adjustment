@@ -52,12 +52,12 @@ public class Generator : MonoBehaviour
             // Acclimation calculations ...
             // Keep length to 5
             if (Agent.scores.Count > 4) {
-                Agent.scores.Dequeue();  
+                Agent.scores.Dequeue(); 
             }
+            // Get standard deviation 
+            Agent.scoreSD = Agent.CalculateStandardDeviation(); 
             // Add new value
             Agent.scores.Enqueue((float)Agent.GetCoinsCollected()/sbp.GetTotalCoins());
-
-
             // Reset coins collected.
             Agent.ResetCoinsCollected(); 
             sbp.IncrementWindowCount();

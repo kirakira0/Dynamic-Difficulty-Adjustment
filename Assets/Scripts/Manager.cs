@@ -33,7 +33,8 @@ public class Manager : MonoBehaviour
                         "\nAcclimated: " + Agent.GetIsAcclimated() + 
                         "\nCoins Per Current Window: " + Agent.GetCoinsPerCurrentWindow() +
                         "\nCoins Collection " + Agent.GetCoinsCollected() + 
-                        "\nScores: " + Agent.ScoresToString();
+                        "\nScores: " + Agent.ScoresToString() + 
+                        "\nScore SD: " + Agent.scoreSD;
     }
 
     public void HandleFall() {  

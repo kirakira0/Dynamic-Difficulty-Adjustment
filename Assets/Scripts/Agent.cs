@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System; 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,8 @@ public class Agent : MonoBehaviour
     private Coroutine generateSequence;
     private bool acclimated = false; 
     private int coinsCollected = 0;
-    public Queue<float> scores = new Queue<float>(); 
+    public Queue<float> scores = new Queue<float>();
+    public float scoreSD = 1;  
     
     private Logger Logger;
     private Manager Manager; 
@@ -121,5 +123,28 @@ public class Agent : MonoBehaviour
             result += "[" + value + "] ";
         }
         return result; 
+    }
+
+    public float CalculateStandardDeviation() {
+        // WORK OUT THE MEAN 
+        // Get sum of list. 
+        float sum = 0; 
+        foreach (float value in this.scores) {
+            sum += value; 
+        }
+        float mean = (float)sum/this.scores.Count;
+        // For each value, subtract mean and square result. 
+        List<float> squaredDifferences = new List<float>();
+        foreach (float value in this.scores) {
+            squaredDifferences.Add((float)Math.Pow(value - mean, 2)); 
+        }
+        // Get mean of squared differences.
+        float sumOfSquares = 0; 
+        foreach (float value in squaredDifferences) {
+            sumOfSquares += value; 
+        }
+        float meanOfSquares = (float)sumOfSquares/squaredDifferences.Count; 
+        // Return square root of mean of squares. 
+        return (float)Math.Pow(meanOfSquares, 0.5);       
     }
 }
