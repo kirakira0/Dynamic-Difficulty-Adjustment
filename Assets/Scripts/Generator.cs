@@ -30,6 +30,8 @@ public class Generator : MonoBehaviour
 
     public IEnumerator GenerateSequence(Subpolicy sbp) {
 
+        int policyIndex = 0; 
+
         generatorRunning = true;
         // Add sequence to the logger.
         
@@ -57,8 +59,18 @@ public class Generator : MonoBehaviour
                 Agent.scores.Dequeue();
                 // IF ACCLIMATED.
                 if (Agent.scoreSD < 0.2) {
-                    Agent.acclimated = true;
-                    Agent.NextPolicy();  
+                    // Agent.acclimated = true;
+                    Debug.Log("ACCLIMATED"); 
+
+                    policyIndex++; 
+                    if (policyIndex % 3 == 0) {
+                        sequence = Agent.sqn1; 
+                    } else if (policyIndex % 3 == 1) {
+                        sequence = Agent.sqn2; 
+                    } else {
+                        sequence = Agent.sqn3; 
+                    } 
+                    // Agent.NextPolicy();  
                 } 
             } 
             // Add new value

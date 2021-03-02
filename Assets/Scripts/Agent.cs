@@ -21,8 +21,13 @@ public class Agent : MonoBehaviour
     private Subpolicy sbp2;
     private Subpolicy sbp3;
     private Subpolicy currentSubpolicy; 
-    private List<Subpolicy> sbpList; 
-    private int policyIndex = 0; 
+    public List<Subpolicy> sbpList; 
+    public int policyIndex = 0; 
+
+    public List<Platform> sqn1 = new List<Platform>(); 
+    public List<Platform> sqn2 = new List<Platform>(); 
+    public List<Platform> sqn3 = new List<Platform>(); 
+
 
 
     // Start is called before the first frame update
@@ -32,14 +37,14 @@ public class Agent : MonoBehaviour
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
         Logger.Start();
 
-        List<Platform> sqn1 = new List<Platform>() {
+        sqn1 = new List<Platform>() {
             new Platform(Width.Medium, Height.Low),
             new Platform(Width.Short, Height.High),
             new Platform(Width.Long, Height.Middle)
         };  
         sbp1 = new Subpolicy(sqn1);
 
-        List<Platform> sqn2 = new List<Platform>() {
+        sqn2 = new List<Platform>() {
             new Platform(Width.Medium, Height.Low),
             new Platform(Width.Short, Height.Low),
             new Platform(Width.Long, Height.High),
@@ -47,7 +52,7 @@ public class Agent : MonoBehaviour
         };  
         sbp2 = new Subpolicy(sqn2);
 
-        List<Platform> sqn3 = new List<Platform>() {
+        sqn3 = new List<Platform>() {
             new Platform(Width.Short, Height.Middle),
             new Platform(Width.Long, Height.Middle),
             new Platform(Width.Medium, Height.Middle)
@@ -146,7 +151,7 @@ public class Agent : MonoBehaviour
     public void NextPolicy() {
                 
         policyIndex++; 
-        
+
         if (policyIndex % 3 == 0) {
             currentSubpolicy = sbp1; 
         } else if (policyIndex % 3 == 1) {
