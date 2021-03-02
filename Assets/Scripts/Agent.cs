@@ -17,10 +17,10 @@ public class Agent : MonoBehaviour
     private Logger Logger;
     private Manager Manager; 
 
-    private Subpolicy sbp1;
-    private Subpolicy sbp2;
-    private Subpolicy sbp3;
-    private Subpolicy currentSubpolicy; 
+    public Subpolicy sbp1;
+    public Subpolicy sbp2;
+    public Subpolicy sbp3;
+    public Subpolicy currentSubpolicy; 
     public List<Subpolicy> sbpList; 
     public int policyIndex = 0; 
 
@@ -74,6 +74,13 @@ public class Agent : MonoBehaviour
 
 
         if(Input.GetKeyDown(KeyCode.Return) && Manager.GetPaused()) {
+            // if cor running 
+                // stop 
+            if (platformGenerator.GetIsRunning()) {
+                StopCoroutine(generateSequence);
+            }
+
+
             Manager.SetPaused(false);
             generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentSubpolicy));
             // Debug.Log("AGENT STARTS COUROUTINE");

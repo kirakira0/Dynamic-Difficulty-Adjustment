@@ -27,6 +27,10 @@ public class Generator : MonoBehaviour
         LOGGER.Start();
     }
 
+    public bool GetIsRunning() {
+        return generatorRunning; 
+    }
+
 
     public IEnumerator GenerateSequence(Subpolicy sbp) {
 
@@ -55,20 +59,26 @@ public class Generator : MonoBehaviour
             // Get standard deviation 
             Agent.scoreSD = Agent.CalculateStandardDeviation();
             // Keep length to 5
-            if (Agent.scores.Count > 2) {
+            if (Agent.scores.Count > 4) {
                 Agent.scores.Dequeue();
                 // IF ACCLIMATED.
                 if (Agent.scoreSD < 0.2) {
                     // Agent.acclimated = true;
                     Debug.Log("ACCLIMATED"); 
+                    
+                    Agent.scores.Clear();
+                    Agent.scoreSD = 1; 
 
                     policyIndex++; 
                     if (policyIndex % 3 == 0) {
-                        sequence = Agent.sqn1; 
+                        sequence = Agent.sqn1;
+                        Agent.currentSubpolicy = Agent.sbp1;  
                     } else if (policyIndex % 3 == 1) {
                         sequence = Agent.sqn2; 
+                        Agent.currentSubpolicy = Agent.sbp2;  
                     } else {
-                        sequence = Agent.sqn3; 
+                        sequence = Agent.sqn3;
+                        Agent.currentSubpolicy = Agent.sbp3;   
                     } 
                     // Agent.NextPolicy();  
                 } 
