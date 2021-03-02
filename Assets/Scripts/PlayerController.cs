@@ -64,6 +64,11 @@ public class PlayerController : MonoBehaviour
 
     public void SetPlayerPosition(Vector3 position) {this.transform.position = position;}
 
+    public void SetPlayerVelocity(Vector3 velocity) {this.rigidbody.velocity = velocity;}
+
     public Vector3 GetPlayerTransform() {return this.transform.position;}
+
+    public int GetLives() {return this.remainingLives;}
+
 
 }

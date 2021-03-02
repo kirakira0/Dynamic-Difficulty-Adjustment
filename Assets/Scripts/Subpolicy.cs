@@ -36,6 +36,10 @@ public class Subpolicy
         return this.sequence;
     }
 
+    public int GetTotalCoins() {
+        return this.totalCoins; 
+    }
+
     public int getWindows() {
         return this.windows;
     }

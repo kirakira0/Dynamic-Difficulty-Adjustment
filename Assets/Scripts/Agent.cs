@@ -9,6 +9,8 @@ public class Agent : MonoBehaviour
 
     private Coroutine generateSequence;
     private bool acclimated = false; 
+    private int coinsCollected = 0; 
+    
     private Logger Logger;
     private Manager Manager; 
 
@@ -52,6 +54,12 @@ public class Agent : MonoBehaviour
     }
 
     void Update() {
+        // Handle game pause.
+        if (Manager.GetPaused()) {
+            // StopGeneration();
+        }
+
+        // Handle jump.
         if (Input.GetKeyDown(KeyCode.Q)) {
             currentSubpolicy = sbp1;
         } 
@@ -62,12 +70,10 @@ public class Agent : MonoBehaviour
             currentSubpolicy = sbp3;
         }
 
-        if(Input.GetKeyDown(KeyCode.Return)) {
-
+        if(Input.GetKeyDown(KeyCode.Return) && Manager.GetPaused()) {
             Manager.SetPaused(false);
-
             generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentSubpolicy));
-            Debug.Log("AGENT STARTS COUROUTINE");
+            // Debug.Log("AGENT STARTS COUROUTINE");
         }
 
     }
@@ -76,7 +82,32 @@ public class Agent : MonoBehaviour
         StopCoroutine(generateSequence);
     }
 
-    public bool getIsAcclimated() {
+    // SETTERS ----------------------------------------------------------------
+    public void IncrementCoinsCollected() {
+        this.coinsCollected++; 
+    }
+
+    public void ResetCoinsCollected() {
+        this.coinsCollected = 0; 
+    }
+
+
+
+    // GETTERS ----------------------------------------------------------------
+
+    public bool GetIsAcclimated() {
         return acclimated;
+    }
+
+    public string GetCurrentSubpolicy() {
+        return currentSubpolicy.GetStringRepresentation(); 
+    }
+
+    public int GetCoinsPerCurrentWindow() {
+        return this.currentSubpolicy.GetTotalCoins(); 
+    }
+
+    public int GetCoinsCollected() {
+        return this.coinsCollected; 
     }
 }

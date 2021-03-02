@@ -14,18 +14,23 @@ public class Generator : MonoBehaviour
     public GameObject mediumPlatform;
     public GameObject longPlatform;
     public Text subpolicyText;
+    public bool generatorRunning = false;
 
     private Agent AGENT;
     private Logger LOGGER; 
+    private Manager Manager; 
 
     void Awake() {
         AGENT = GameObject.Find("Agent").GetComponent<Agent>(); 
+        Manager = GameObject.Find("Manager").GetComponent<Manager>(); 
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
         LOGGER.Start();
     }
 
 
     public IEnumerator GenerateSequence(Subpolicy sbp) {
+
+        generatorRunning = true;
         // Add sequence to the logger.
         
         LOGGER.AddSubpolicy(sbp);
@@ -37,10 +42,12 @@ public class Generator : MonoBehaviour
 
         // Repeated platform generation while player is not acclimated. 
         List<Platform> sequence = sbp.getSequence();
-        while (!AGENT.getIsAcclimated()) {
+        while (!AGENT.GetIsAcclimated() && !Manager.GetPaused()) {
             for (int i = 0; i < sequence.Count; i++) {
-                GeneratePlatform(sequence[i]);
-                yield return new WaitForSeconds(1.6f);
+                if (!Manager.GetPaused()) {
+                    GeneratePlatform(sequence[i]);
+                    yield return new WaitForSeconds(1.6f);
+                }
             } 
             sbp.IncrementWindowCount();
         }
@@ -59,6 +66,10 @@ public class Generator : MonoBehaviour
         else { yOffset = 1; }
 
         Instantiate(type, new Vector3(platformGenerationPoint.position.x, platformGenerationPoint.position.y + yOffset, 0), Quaternion.identity);
+    }
+
+    public void StopGeneration() {
+        StopCoroutine("GenerateSequence");
     }
 
 

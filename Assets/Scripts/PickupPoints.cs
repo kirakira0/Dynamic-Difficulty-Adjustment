@@ -6,12 +6,14 @@ public class PickupPoints : MonoBehaviour
     public int scoreToGive;
 
     private Manager manager; 
+    private Agent Agent; 
     // private ScoreManager scoreManager;
     
 	// Use this for initialization
 	void Start () 
 	{
         manager = GameObject.Find("Manager").GetComponent<Manager>();
+        Agent = GameObject.Find("Agent").GetComponent<Agent>();
 	}
 	
 	// Update is called once per frame
@@ -26,6 +28,7 @@ public class PickupPoints : MonoBehaviour
         if(other.gameObject.name == "Player")
         {
             // manager.IncrementCoinCount();
+            Agent.IncrementCoinsCollected(); 
             // scoreManager.AddScore(scoreToGive);
             gameObject.SetActive(false);
         }
