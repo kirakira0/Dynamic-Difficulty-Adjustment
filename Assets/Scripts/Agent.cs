@@ -9,7 +9,8 @@ public class Agent : MonoBehaviour
 
     private Coroutine generateSequence;
     private bool acclimated = false; 
-    private int coinsCollected = 0; 
+    private int coinsCollected = 0;
+    public Queue<float> scores = new Queue<float>(); 
     
     private Logger Logger;
     private Manager Manager; 
@@ -18,6 +19,7 @@ public class Agent : MonoBehaviour
     private Subpolicy sbp2;
     private Subpolicy sbp3;
     private Subpolicy currentSubpolicy; 
+    private List<Subpolicy> sbpList; 
 
 
     // Start is called before the first frame update
@@ -50,6 +52,8 @@ public class Agent : MonoBehaviour
         sbp3 = new Subpolicy(sqn3);
 
         currentSubpolicy = sbp1;
+
+        List<Subpolicy> sbpList = new List<Subpolicy>() { sbp1, sbp2, sbp3 };
 
     }
 
@@ -109,5 +113,13 @@ public class Agent : MonoBehaviour
 
     public int GetCoinsCollected() {
         return this.coinsCollected; 
+    }
+
+    public string ScoresToString() {
+        string result = ""; 
+        foreach (float value in this.scores) {
+            result += "[" + value + "] ";
+        }
+        return result; 
     }
 }

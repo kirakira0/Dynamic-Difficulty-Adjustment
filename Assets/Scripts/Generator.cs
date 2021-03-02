@@ -14,7 +14,7 @@ public class Generator : MonoBehaviour
     public GameObject mediumPlatform;
     public GameObject longPlatform;
     public Text subpolicyText;
-    public bool generatorRunning = false;
+    public bool generatorRunning = false; 
 
     private Agent Agent;
     private Logger LOGGER; 
@@ -49,6 +49,15 @@ public class Generator : MonoBehaviour
                     yield return new WaitForSeconds(1.6f);
                 }
             }
+            // Acclimation calculations ...
+            // Keep length to 5
+            if (Agent.scores.Count > 4) {
+                Agent.scores.Dequeue();  
+            }
+            // Add new value
+            Agent.scores.Enqueue((float)Agent.GetCoinsCollected()/sbp.GetTotalCoins());
+
+
             // Reset coins collected.
             Agent.ResetCoinsCollected(); 
             sbp.IncrementWindowCount();

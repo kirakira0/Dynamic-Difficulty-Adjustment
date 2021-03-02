@@ -32,7 +32,8 @@ public class Manager : MonoBehaviour
         infoText.text = "Current Subpolicy: " + Agent.GetCurrentSubpolicy() +                        
                         "\nAcclimated: " + Agent.GetIsAcclimated() + 
                         "\nCoins Per Current Window: " + Agent.GetCoinsPerCurrentWindow() +
-                        "\nCoins Collection " + Agent.GetCoinsCollected();
+                        "\nCoins Collection " + Agent.GetCoinsCollected() + 
+                        "\nScores: " + Agent.ScoresToString();
     }
 
     public void HandleFall() {  
