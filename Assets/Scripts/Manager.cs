@@ -12,13 +12,13 @@ public class Manager : MonoBehaviour
     public Transform startingPlatformPoint;
     public Text livesText; 
     public Text infoText; 
+    public Text coinText; 
     
     private bool gameIsPaused = true; 
     private Logger LOGGER; 
     private PlayerController PlayerController;
     private Generator Generator;      
     private Agent Agent;  
-
 
     void Awake() {
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
@@ -28,7 +28,8 @@ public class Manager : MonoBehaviour
     }
 
     void Update() {
-        livesText.text = "Remaining Lives: " + PlayerController.GetLives();
+        livesText.text = "LIVES REMAINING: " + PlayerController.GetLives();
+        coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();
         infoText.text = "Current Subpolicy: " + Agent.GetCurrentSubpolicy() +                        
                         "\nAcclimated: " + Agent.GetIsAcclimated() + 
                         "\nCoins Per Current Window: " + Agent.GetCoinsPerCurrentWindow() +
@@ -51,7 +52,7 @@ public class Manager : MonoBehaviour
         }
         // // Reset platforms. 
         PlayerController.SetPlayerPosition(new Vector3(startingPlayerPoint.position.x + 3, startingPlayerPoint.position.y, 0));
-        Instantiate(startingPlatform, new Vector3(startingPlayerPoint.position.x, startingPlatformPoint.position.y, 0), Quaternion.identity);                 
+        Instantiate(startingPlatform, new Vector3(PlayerController.GetPlayerTransform().x, startingPlatformPoint.position.y, 0), Quaternion.identity);                         
     }
 
     public void HandleDeath() {

@@ -11,6 +11,7 @@ public class Agent : MonoBehaviour
     private Coroutine generateSequence;
     public bool acclimated = false; 
     private int coinsCollected = 0;
+    private int totalCoinsCollected = 0; 
     public Queue<float> scores = new Queue<float>();
     public float scoreSD = 1;  
     
@@ -94,7 +95,8 @@ public class Agent : MonoBehaviour
 
     // SETTERS ----------------------------------------------------------------
     public void IncrementCoinsCollected() {
-        this.coinsCollected++; 
+        this.coinsCollected++;
+        this.totalCoinsCollected++;  
     }
 
     public void ResetCoinsCollected() {
@@ -107,6 +109,10 @@ public class Agent : MonoBehaviour
 
     public bool GetIsAcclimated() {
         return acclimated;
+    }
+
+    public int GetTotalCoinsCollected() {
+        return this.totalCoinsCollected; 
     }
 
     public string GetCurrentSubpolicy() {
