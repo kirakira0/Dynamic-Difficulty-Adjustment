@@ -52,7 +52,7 @@ public class Manager : MonoBehaviour
         }
         // // Reset platforms. 
         PlayerController.SetPlayerPosition(new Vector3(startingPlayerPoint.position.x + 3, startingPlayerPoint.position.y, 0));
-        Instantiate(startingPlatform, new Vector3(PlayerController.GetPlayerTransform().x, startingPlatformPoint.position.y, 0), Quaternion.identity);                         
+        Instantiate(startingPlatform, new Vector3(PlayerController.GetPlayerTransform().x - 3, startingPlatformPoint.position.y, 0), Quaternion.identity);                         
     }
 
     public void HandleDeath() {
