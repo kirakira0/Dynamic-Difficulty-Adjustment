@@ -13,18 +13,29 @@ public class Manager : MonoBehaviour
     public Text livesText; 
     public Text infoText; 
     public Text coinText; 
+    public GameObject deathCanvas; 
+    public Text summaryText;  
     
     private bool gameIsPaused = true; 
     private Logger LOGGER; 
     private PlayerController PlayerController;
     private Generator Generator;      
-    private Agent Agent;  
+    private Agent Agent; 
+    private Web Web;
+
+    private bool x = true;
+    private float xpos;  
+ 
+
 
     void Awake() {
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
         PlayerController = GameObject.Find("Player").GetComponent<PlayerController>();
-        Generator = GameObject.Find("PlatformGenerator").GetComponent<Generator>();
-        Agent = GameObject.Find("Agent").GetComponent<Agent>();
+        Generator = GameObject.Find("PlatformGenerator").GetComponent<Generator>(); 
+        Agent = GameObject.Find("Agent").GetComponent<Agent>(); 
+        Web = GameObject.Find("Web").GetComponent<Web>(); 
+        // deathCanvas.SetActive(false);
+        xpos = PlayerController.GetPlayerTransform().x; 
     }
 
     void Update() {
@@ -50,16 +61,26 @@ public class Manager : MonoBehaviour
         foreach(GameObject platform in platforms) {
             GameObject.Destroy(platform);
         }
-        // // Reset platforms. 
-        PlayerController.SetPlayerPosition(new Vector3(startingPlayerPoint.position.x + 3, startingPlayerPoint.position.y, 0));
-        Instantiate(startingPlatform, new Vector3(PlayerController.GetPlayerTransform().x - 3, startingPlatformPoint.position.y, 0), Quaternion.identity);                         
+        // Reset platforms. 
+        PlayerController.SetPlayerPosition(new Vector3(xpos, startingPlayerPoint.position.y, 0));
+        Instantiate(startingPlatform, new Vector3(xpos, startingPlayerPoint.position.y - 3, 0), Quaternion.identity);                         
+
+        // Instantiate(startingPlatform, new Vector3(PlayerController.GetPlayerTransform().x - 3, startingPlatformPoint.position.y, 0), Quaternion.identity);                         
     }
 
     public void HandleDeath() {
-        HandleFall();
-        // Reset room. 
-        Scene scene = SceneManager.GetActiveScene(); 
-        SceneManager.LoadScene(scene.name);   
+        if (x) {
+
+            HandleFall();
+            
+            StartCoroutine(Web.InsertData(Agent.totalCoinsCollected));
+            x = false; 
+
+            // Show summary. 
+            summaryText.text = "You collected a total of " + Agent.totalCoinsCollected + " and acclimated to " + Agent.subpolicies +
+                                " subpolicies."; 
+            deathCanvas.SetActive(true); 
+        } 
     }
 
     public bool GetPaused() {

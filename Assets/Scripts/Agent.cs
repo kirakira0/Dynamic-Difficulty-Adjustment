@@ -11,9 +11,11 @@ public class Agent : MonoBehaviour
     private Coroutine generateSequence;
     public bool acclimated = false; 
     private int coinsCollected = 0;
-    private int totalCoinsCollected = 0; 
+    public int totalCoinsCollected = 0; 
     public Queue<float> scores = new Queue<float>();
     public float scoreSD = 1;  
+    public int subpolicies = 0; 
+    public Subpolicy[] allPolicies; 
     
     private Logger Logger;
     private Manager Manager; 
@@ -180,5 +182,14 @@ public class Agent : MonoBehaviour
         this.scores.Clear();
         this.scoreSD = 1;   
         generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentSubpolicy));
+    }
+
+    /**
+     * Once the player has acclimated OR IF THE PLAYER DIES, add the supolicy to the list of 
+     * encountered policies. 
+    */ 
+
+    public void AddPolicy() {
+
     }
 }

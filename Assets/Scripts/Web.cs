@@ -8,10 +8,9 @@ public class Web : MonoBehaviour
     string usersURL = "http://localhost:8080/DDA/GetUsers.php";
     string registerPlayerURL = "http://localhost:8080/DDA/RegisterUser.php";
     string addPlayerURL = "http://localhost:8080/DDA/AddPlayer.php";
+    string insertScoreURL = "http://localhost:8080/DDA/InsertScore.php";
 
-    public void Start() {
-        StartCoroutine(AddPlayer());
-    }
+    string insertDataURL = "http://localhost:8080/DDA/InsertData.php";
 
     public IEnumerator GetData(string URL) {
         using (UnityWebRequest www = UnityWebRequest.Get(URL)) {
@@ -28,29 +27,17 @@ public class Web : MonoBehaviour
         }
     }
 
-    // public IEnumerator RegisterPlayer(string userIp, int score) {
-    //     WWWForm form = new WWWForm();
-    //     form.AddField("userIp", userIp);
-    //     form.AddField("score", score);
-        
-    //     using (UnityWebRequest www = UnityWebRequest.Post(registerPlayerURL, form)) {
-    //         yield return www.SendWebRequest();
-    //         if (www.isNetworkError || www.isHttpError) {
-    //             Debug.Log(www.error);
-    //         } else {
-    //             // Show results as text.
-    //             Debug.Log(www.downloadHandler.text);
-    //             // Or retrieve as binary data
-    //             byte[] results = www.downloadHandler.data;  
-    //         }
-    //     }
-    // }
 
-    public IEnumerator AddPlayer() {
+    public IEnumerator InsertData(int totalCoins) {
         WWWForm form = new WWWForm();
-        form.AddField("coins", 0);
-        
-        using (UnityWebRequest www = UnityWebRequest.Post(addPlayerURL, form)) {
+
+        // int[] policies = new int[] { 1, 3, 5 };
+
+
+        form.AddField("totalCoins", totalCoins);
+        // form.AddField("policies[]", policies);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(insertDataURL, form)) {
             yield return www.SendWebRequest();
             if (www.isNetworkError || www.isHttpError) {
                 Debug.Log(www.error);
@@ -62,5 +49,40 @@ public class Web : MonoBehaviour
             }
         }
     }
-      
+
+    public IEnumerator AddPlayer() {
+        WWWForm form = new WWWForm();
+        form.AddField("coins", 0);
+        
+        using (UnityWebRequest www = UnityWebRequest.Post(addPlayerURL, form)) {
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError) {
+                Debug.Log(www.error);
+            } else {
+                // Show results as text.
+                 Debug.Log(www.downloadHandler.text);
+                // Debug.Log(www.downloadHandler.insert_id);
+                // Or retrieve as binary data
+                byte[] results = www.downloadHandler.data;  
+            }
+        }
+    }
+
+    public IEnumerator InsertScore() {
+        WWWForm form = new WWWForm();
+        // form.AddField("coins", 0);
+        
+        using (UnityWebRequest www = UnityWebRequest.Post(insertScoreURL, form)) {
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError) {
+                Debug.Log(www.error);
+            } else {
+                // Show results as text.
+                 Debug.Log(www.downloadHandler.text);
+                // Debug.Log(www.downloadHandler.insert_id);
+                // Or retrieve as binary data
+                byte[] results = www.downloadHandler.data;  
+            }
+        }
+    }     
 }

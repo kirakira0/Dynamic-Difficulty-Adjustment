@@ -4,9 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour 
 {
+    public string sceneName = "EndlessRunner";
+
 	public void PlayGame()
     {
-        SceneManager.LoadScene("RunnerRoom");
+        SceneManager.LoadScene(sceneName);
     }
 
     public void QuitGame()

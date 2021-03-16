@@ -65,6 +65,7 @@ public class Generator : MonoBehaviour
                 if (Agent.scoreSD < 0.2) {
                     // Agent.acclimated = true;
                     Debug.Log("ACCLIMATED"); 
+                    Agent.subpolicies++; 
                     
                     Agent.scores.Clear();
                     Agent.scoreSD = 1; 
