@@ -5,6 +5,7 @@ using UnityEngine;
 public class Subpolicy 
 {
     // TODO: Use a platform object as opposed to a list of strings. 
+    public int index; 
     private List<Platform> sequence = new List<Platform>(); // type, height
     private int windows;
     private int coinsCollected;
@@ -13,7 +14,8 @@ public class Subpolicy
     private List<float> perWindowScore; 
     private int deathsPerSequence; 
 
-    public Subpolicy(List<Platform> sequence) {
+    public Subpolicy(int index, List<Platform> sequence) {
+        this.index = index; 
         this.sequence = sequence;
         this.windows = 0;
         this.coinsCollected = 0;

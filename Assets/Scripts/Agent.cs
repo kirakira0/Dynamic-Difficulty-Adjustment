@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Agent : MonoBehaviour
 {
+
+    public float ACCLIMATION_THRESHOLD = 0.2f; 
     public float PLATFORM_SPEED = 0.1f; 
     public Generator platformGenerator; 
 
@@ -45,7 +47,7 @@ public class Agent : MonoBehaviour
             new Platform(Width.Short, Height.High),
             new Platform(Width.Long, Height.Middle)
         };  
-        sbp1 = new Subpolicy(sqn1);
+        sbp1 = new Subpolicy(1, sqn1);
 
         sqn2 = new List<Platform>() {
             new Platform(Width.Medium, Height.Low),
@@ -53,14 +55,14 @@ public class Agent : MonoBehaviour
             new Platform(Width.Long, Height.High),
             new Platform(Width.Short, Height.High)
         };  
-        sbp2 = new Subpolicy(sqn2);
+        sbp2 = new Subpolicy(2, sqn2);
 
         sqn3 = new List<Platform>() {
             new Platform(Width.Short, Height.Middle),
             new Platform(Width.Long, Height.Middle),
             new Platform(Width.Medium, Height.Middle)
         };  
-        sbp3 = new Subpolicy(sqn3);
+        sbp3 = new Subpolicy(3, sqn3);
 
         // currentSubpolicy = sbp1;
         List<Subpolicy> sbpList = new List<Subpolicy>() { sbp1, sbp2, sbp3 };

@@ -14,7 +14,8 @@ public class Manager : MonoBehaviour
     public Text infoText; 
     public Text coinText; 
     public GameObject deathCanvas; 
-    public Text summaryText;  
+    public Text summaryText; 
+    public Text reportText;  
     
     private bool gameIsPaused = true; 
     private Logger LOGGER; 
@@ -39,7 +40,7 @@ public class Manager : MonoBehaviour
     }
 
     void Update() {
-        livesText.text = "LIVES REMAINING: " + PlayerController.GetLives();
+        livesText.text = "ROUND: " + (4 - PlayerController.GetLives());
         coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();
         infoText.text = "Current Subpolicy: " + Agent.GetCurrentSubpolicy() +                        
                         "\nAcclimated: " + Agent.GetIsAcclimated() + 
@@ -55,6 +56,11 @@ public class Manager : MonoBehaviour
         
         // Stop coroutine.
         Generator.StopGeneration();
+
+        // Make report of the info.
+        RoundReport report = new RoundReport(Generator.roundNumber, Generator.sbp.GetStringRepresentation(), Generator.sbp.index, Generator.seenWindows, Agent.scores, PlayerController.GetLives(), false); 
+        Generator.roundReports.Add(report);
+        Generator.seenWindows = 0; 
   
         // Destroy all platforms. 
         GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
@@ -73,12 +79,21 @@ public class Manager : MonoBehaviour
 
             HandleFall();
             
-            StartCoroutine(Web.InsertData(Agent.totalCoinsCollected));
+            // StartCoroutine(Web.InsertData(Agent.totalCoinsCollected));
             x = false; 
 
             // Show summary. 
-            summaryText.text = "You collected a total of " + Agent.totalCoinsCollected + " and acclimated to " + Agent.subpolicies +
-                                " subpolicies."; 
+            summaryText.text = "YOU WON! You collected a total of " + Agent.totalCoinsCollected + 
+                                " and acclimated to " + Agent.subpolicies + " subpolicies. " +
+                                "Acclimation threshold set to: " + Agent.ACCLIMATION_THRESHOLD;
+            string report = ""; 
+            foreach (var roundReport in Generator.roundReports) {
+                report += roundReport.GetReport() + "\n\n";
+            }
+            
+            reportText.text = report; 
+
+
             deathCanvas.SetActive(true); 
         } 
     }

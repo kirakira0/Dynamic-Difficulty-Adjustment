@@ -19,12 +19,32 @@ public class Generator : MonoBehaviour
     private Agent Agent;
     private Logger LOGGER; 
     private Manager Manager; 
+    private PlayerController Player; 
+
+    public Subpolicy sbp; 
+
+
+
+    public List<RoundReport> roundReports;
+
+    public int roundNumber; 
+    public int seenWindows; 
+    public List<float> acclimationScores; 
+    public int livesAtStart; 
 
     void Awake() {
+        this.sbp = null; 
+
+        roundNumber = 1;
+        seenWindows = 0; 
+        
         Agent = GameObject.Find("Agent").GetComponent<Agent>(); 
         Manager = GameObject.Find("Manager").GetComponent<Manager>(); 
+        Player = GameObject.Find("Player").GetComponent<PlayerController>(); 
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
         LOGGER.Start();
+        roundReports = new List<RoundReport>();
+        livesAtStart = Player.GetLives(); 
     }
 
     public bool GetIsRunning() {
@@ -34,36 +54,47 @@ public class Generator : MonoBehaviour
 
     public IEnumerator GenerateSequence(Subpolicy sbp) {
 
+        this.sbp = sbp; 
+
         int policyIndex = 0; 
 
         generatorRunning = true;
         // Add sequence to the logger.
         
         LOGGER.AddSubpolicy(sbp);
-        LOGGER.sbpStack.Push(sbp); 
-        
-        // string s = sbp.GetStringRepresentation();
-        // Debug.Log(s);
-        // subpolicyText.text = s;
+        LOGGER.sbpStack.Push(sbp);
 
         // Repeated platform generation while player is not acclimated. 
         List<Platform> sequence = sbp.getSequence();
         while (!Agent.GetIsAcclimated() && !Manager.GetPaused()) { 
+            roundNumber = 4 - Player.remainingLives; 
             for (int i = 0; i < sequence.Count; i++) {
                 if (!Manager.GetPaused()) {
                     GeneratePlatform(sequence[i]);
                     yield return new WaitForSeconds(1.6f);
                 }
             }
+            seenWindows++; 
             // Acclimation calculations ...
             // Get standard deviation 
             Agent.scoreSD = Agent.CalculateStandardDeviation();
             // Keep length to 5
-            if (Agent.scores.Count > 4) {
+            // if (Agent.scores.Count > 4) {
+            if (Agent.scores.Count > 2) {
+
                 Agent.scores.Dequeue();
+                
                 // IF ACCLIMATED.
+                
                 if (Agent.scoreSD < 0.2) {
                     // Agent.acclimated = true;
+
+                    // Make report of the info.
+                    RoundReport report = new RoundReport(roundNumber, sbp.GetStringRepresentation(), sbp.index, seenWindows, Agent.scores, Player.GetLives(), true); 
+                    roundReports.Add(report);
+
+
+
                     Debug.Log("ACCLIMATED"); 
                     Agent.subpolicies++; 
                     
@@ -72,8 +103,11 @@ public class Generator : MonoBehaviour
 
                     policyIndex++; 
                     if (policyIndex % 3 == 0) {
-                        sequence = Agent.sqn1;
-                        Agent.currentSubpolicy = Agent.sbp1;  
+                        // PLAYER HAS REACHED ENDGAME
+                        Debug.Log("PLAYER HAS WON"); 
+                        Manager.HandleDeath();
+                        // sequence = Agent.sqn1;
+                        // Agent.currentSubpolicy = Agent.sbp1;  
                     } else if (policyIndex % 3 == 1) {
                         sequence = Agent.sqn2; 
                         Agent.currentSubpolicy = Agent.sbp2;  
@@ -81,6 +115,9 @@ public class Generator : MonoBehaviour
                         sequence = Agent.sqn3;
                         Agent.currentSubpolicy = Agent.sbp3;   
                     } 
+
+                    Player.remainingLives--; 
+                    seenWindows = 0; 
                     // Agent.NextPolicy();  
                 } 
             } 
