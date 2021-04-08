@@ -40,7 +40,7 @@ public class Manager : MonoBehaviour
     }
 
     void Update() {
-        livesText.text = "ROUND: " + (4 - PlayerController.GetLives());
+        livesText.text = "REMAINING LIVES: " + PlayerController.remainingLives;
         coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();
         infoText.text = "Current Subpolicy: " + Agent.GetCurrentSubpolicy() +                        
                         "\nAcclimated: " + Agent.GetIsAcclimated() + 
@@ -53,14 +53,16 @@ public class Manager : MonoBehaviour
     public void HandleFall() {  
         // Pause game. 
         SetPaused(true);
+
+        // Add to the current policy report.
+        Generator.currentPolicyReport.AddLife(PlayerController.remainingLives); 
+        Debug.Log("ADDING LIFE");
+        Generator.currentPolicyReport.AddWindowCount(Generator.seenWindows); 
+        Debug.Log("ADD LIFE TO QUEUE");
+
         
         // Stop coroutine.
         Generator.StopGeneration();
-
-        // Make report of the info.
-        RoundReport report = new RoundReport(Generator.roundNumber, Generator.sbp.GetStringRepresentation(), Generator.sbp.index, Generator.seenWindows, Agent.scores, PlayerController.GetLives(), false); 
-        Generator.roundReports.Add(report);
-        Generator.seenWindows = 0; 
   
         // Destroy all platforms. 
         GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
@@ -83,12 +85,17 @@ public class Manager : MonoBehaviour
             x = false; 
 
             // Show summary. 
-            summaryText.text = "YOU WON! You collected a total of " + Agent.totalCoinsCollected + 
+            summaryText.text = "You collected a total of " + Agent.totalCoinsCollected + 
                                 " and acclimated to " + Agent.subpolicies + " subpolicies. " +
                                 "Acclimation threshold set to: " + Agent.ACCLIMATION_THRESHOLD;
             string report = ""; 
-            foreach (var roundReport in Generator.roundReports) {
-                report += roundReport.GetReport() + "\n\n";
+
+            if (Generator.policyReports.Count > 0) {
+                foreach (var policyReport in Generator.policyReports) {
+                    report += policyReport.GetReport() + "\n\n";
+                }
+            } else {
+                report += "You did not acclimate to any subpolicies with the lives allotted."; 
             }
             
             reportText.text = report; 

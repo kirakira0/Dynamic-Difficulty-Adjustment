@@ -23,11 +23,9 @@ public class Generator : MonoBehaviour
 
     public Subpolicy sbp; 
 
+    public List<PolicyReport> policyReports;
+    public PolicyReport currentPolicyReport; 
 
-
-    public List<RoundReport> roundReports;
-
-    public int roundNumber; 
     public int seenWindows; 
     public List<float> acclimationScores; 
     public int livesAtStart; 
@@ -35,7 +33,6 @@ public class Generator : MonoBehaviour
     void Awake() {
         this.sbp = null; 
 
-        roundNumber = 1;
         seenWindows = 0; 
         
         Agent = GameObject.Find("Agent").GetComponent<Agent>(); 
@@ -43,8 +40,9 @@ public class Generator : MonoBehaviour
         Player = GameObject.Find("Player").GetComponent<PlayerController>(); 
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
         LOGGER.Start();
-        roundReports = new List<RoundReport>();
         livesAtStart = Player.GetLives(); 
+
+        policyReports = new List<PolicyReport>(); 
     }
 
     public bool GetIsRunning() {
@@ -67,7 +65,14 @@ public class Generator : MonoBehaviour
         // Repeated platform generation while player is not acclimated. 
         List<Platform> sequence = sbp.getSequence();
         while (!Agent.GetIsAcclimated() && !Manager.GetPaused()) { 
-            roundNumber = 4 - Player.remainingLives; 
+
+            // POLICY START!
+            // Make a new report. 
+            currentPolicyReport = new PolicyReport(sbp.index);
+            currentPolicyReport.AddLife(Player.remainingLives);
+
+
+
             for (int i = 0; i < sequence.Count; i++) {
                 if (!Manager.GetPaused()) {
                     GeneratePlatform(sequence[i]);
@@ -86,14 +91,12 @@ public class Generator : MonoBehaviour
                 
                 // IF ACCLIMATED.
                 
-                if (Agent.scoreSD < 0.2) {
-                    // Agent.acclimated = true;
-
-                    // Make report of the info.
-                    RoundReport report = new RoundReport(roundNumber, sbp.GetStringRepresentation(), sbp.index, seenWindows, Agent.scores, Player.GetLives(), true); 
-                    roundReports.Add(report);
-
-
+                if (Agent.scoreSD < Agent.ACCLIMATION_THRESHOLD) {
+                    // Fill out info in Policy Report. 
+                    currentPolicyReport.AddWindowCount(seenWindows);
+                    currentPolicyReport.AddAScores(Agent.scores); 
+                    // Add the report to the list. 
+                    policyReports.Add(currentPolicyReport);
 
                     Debug.Log("ACCLIMATED"); 
                     Agent.subpolicies++; 
@@ -116,7 +119,6 @@ public class Generator : MonoBehaviour
                         Agent.currentSubpolicy = Agent.sbp3;   
                     } 
 
-                    Player.remainingLives--; 
                     seenWindows = 0; 
                     // Agent.NextPolicy();  
                 } 

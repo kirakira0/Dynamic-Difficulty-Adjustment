@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 0.01f;
     public LayerMask whatIsGround;
     public float groundedRadius;
-    public int remainingLives = 3; 
+    public int remainingLives = 10; 
 
     private Rigidbody2D rigidbody;
     private Transform groundCheck;
