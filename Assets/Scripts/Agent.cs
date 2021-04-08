@@ -19,64 +19,35 @@ public class Agent : MonoBehaviour
     public int subpolicies = 0; 
     public Subpolicy[] allPolicies; 
     
-    private Logger Logger;
     private Manager Manager; 
 
-    public Subpolicy sbp1;
-    public Subpolicy sbp2;
-    public Subpolicy sbp3;
-    public Subpolicy currentSubpolicy; 
-    public List<Subpolicy> sbpList; 
+    public Policy p1;
+    public Policy p2;
+    public Policy p3;
+
+    public List<Policy> policies; 
+    public Policy currentPolicy; 
     public int policyIndex = 0; 
 
-    public List<Platform> sqn1 = new List<Platform>(); 
-    public List<Platform> sqn2 = new List<Platform>(); 
-    public List<Platform> sqn3 = new List<Platform>(); 
-
-
-
-    // Start is called before the first frame update
     void Start()
     {
-        Logger = GameObject.Find("Logger").GetComponent<Logger>(); 
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
-        Logger.Start();
 
-        sqn1 = new List<Platform>() {
-            new Platform(Width.Medium, Height.Low),
-            new Platform(Width.Short, Height.High),
-            new Platform(Width.Long, Height.Middle)
-        };  
-        sbp1 = new Subpolicy(1, sqn1);
+        p1 = new Policy(1);
+        p2 = new Policy(2);
+        p3 = new Policy(3);
 
-        sqn2 = new List<Platform>() {
-            new Platform(Width.Medium, Height.Low),
-            new Platform(Width.Short, Height.Low),
-            new Platform(Width.Long, Height.High),
-            new Platform(Width.Short, Height.High)
-        };  
-        sbp2 = new Subpolicy(2, sqn2);
-
-        sqn3 = new List<Platform>() {
-            new Platform(Width.Short, Height.Middle),
-            new Platform(Width.Long, Height.Middle),
-            new Platform(Width.Medium, Height.Middle)
-        };  
-        sbp3 = new Subpolicy(3, sqn3);
-
-        // currentSubpolicy = sbp1;
-        List<Subpolicy> sbpList = new List<Subpolicy>() { sbp1, sbp2, sbp3 };
-        currentSubpolicy = sbpList[policyIndex];
+        // currentPolicy = sbp1;
+        List<Policy> policies = new List<Policy>() { p1, p2, p3 };
+        currentPolicy = policies[policyIndex];
 
     }
 
     void Update() {
-
         // Handle game pause.
         if (Manager.GetPaused()) {
             // StopGeneration();
         }
-
 
         if(Input.GetKeyDown(KeyCode.Return) && Manager.GetPaused()) {
             // if cor running 
@@ -85,9 +56,8 @@ public class Agent : MonoBehaviour
                 StopCoroutine(generateSequence);
             }
 
-
             Manager.SetPaused(false);
-            generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentSubpolicy));
+            generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentPolicy));
             // Debug.Log("AGENT STARTS COUROUTINE");
         }
 
@@ -107,8 +77,6 @@ public class Agent : MonoBehaviour
         this.coinsCollected = 0; 
     }
 
-
-
     // GETTERS ----------------------------------------------------------------
 
     public bool GetIsAcclimated() {
@@ -119,12 +87,12 @@ public class Agent : MonoBehaviour
         return this.totalCoinsCollected; 
     }
 
-    public string GetCurrentSubpolicy() {
-        return currentSubpolicy.GetStringRepresentation(); 
+    public string GetCurrentPolicy() {
+        return currentPolicy.GetStringRepresentation(); 
     }
 
     public int GetCoinsPerCurrentWindow() {
-        return this.currentSubpolicy.GetTotalCoins(); 
+        return this.currentPolicy.coinsPerWindow; 
     }
 
     public int GetCoinsCollected() {
@@ -170,11 +138,11 @@ public class Agent : MonoBehaviour
         policyIndex++; 
 
         if (policyIndex % 3 == 0) {
-            currentSubpolicy = sbp1; 
+            currentPolicy = p1; 
         } else if (policyIndex % 3 == 1) {
-            currentSubpolicy = sbp2; 
+            currentPolicy = p2; 
         } else {
-            currentSubpolicy = sbp3; 
+            currentPolicy = p3; 
         }       
 
         Debug.Log("ACCLIMATED");
@@ -183,7 +151,7 @@ public class Agent : MonoBehaviour
         this.acclimated = false;
         this.scores.Clear();
         this.scoreSD = 1;   
-        generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentSubpolicy));
+        generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentPolicy));
     }
 
     /**

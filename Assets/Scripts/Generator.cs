@@ -13,15 +13,14 @@ public class Generator : MonoBehaviour
     public GameObject shortPlatform;
     public GameObject mediumPlatform;
     public GameObject longPlatform;
-    public Text subpolicyText;
+    public Text PolicyText;
     public bool generatorRunning = false; 
 
     private Agent Agent;
-    private Logger LOGGER; 
     private Manager Manager; 
     private PlayerController Player; 
 
-    public Subpolicy sbp; 
+    public Policy p; 
 
     public List<PolicyReport> policyReports;
     public PolicyReport currentPolicyReport; 
@@ -31,15 +30,13 @@ public class Generator : MonoBehaviour
     public int livesAtStart; 
 
     void Awake() {
-        this.sbp = null; 
+        this.p = null; 
 
         seenWindows = 0; 
         
         Agent = GameObject.Find("Agent").GetComponent<Agent>(); 
         Manager = GameObject.Find("Manager").GetComponent<Manager>(); 
         Player = GameObject.Find("Player").GetComponent<PlayerController>(); 
-        LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
-        LOGGER.Start();
         livesAtStart = Player.GetLives(); 
 
         policyReports = new List<PolicyReport>(); 
@@ -50,25 +47,25 @@ public class Generator : MonoBehaviour
     }
 
 
-    public IEnumerator GenerateSequence(Subpolicy sbp) {
+    public IEnumerator GenerateSequence(Policy p) {
 
-        this.sbp = sbp; 
+        this.p = p; 
 
         int policyIndex = 0; 
 
         generatorRunning = true;
         // Add sequence to the logger.
         
-        LOGGER.AddSubpolicy(sbp);
-        LOGGER.sbpStack.Push(sbp);
+        // LOGGER.AddPolicy(p);
+        // LOGGER.pStack.Push(p);
 
         // Repeated platform generation while player is not acclimated. 
-        List<Platform> sequence = sbp.getSequence();
+        List<Platform> sequence = p.sequence;
         while (!Agent.GetIsAcclimated() && !Manager.GetPaused()) { 
 
             // POLICY START!
             // Make a new report. 
-            currentPolicyReport = new PolicyReport(sbp.index);
+            currentPolicyReport = new PolicyReport(p.index);
             currentPolicyReport.AddLife(Player.remainingLives);
 
 
@@ -110,13 +107,13 @@ public class Generator : MonoBehaviour
                         Debug.Log("PLAYER HAS WON"); 
                         Manager.HandleDeath();
                         // sequence = Agent.sqn1;
-                        // Agent.currentSubpolicy = Agent.sbp1;  
+                        // Agent.currentPolicy = Agent.p1;  
                     } else if (policyIndex % 3 == 1) {
-                        sequence = Agent.sqn2; 
-                        Agent.currentSubpolicy = Agent.sbp2;  
+                        sequence = Agent.p1.sequence; 
+                        Agent.currentPolicy = Agent.p2;  
                     } else {
-                        sequence = Agent.sqn3;
-                        Agent.currentSubpolicy = Agent.sbp3;   
+                        sequence = Agent.p3.sequence;
+                        Agent.currentPolicy = Agent.p3;   
                     } 
 
                     seenWindows = 0; 
@@ -124,10 +121,9 @@ public class Generator : MonoBehaviour
                 } 
             } 
             // Add new value
-            Agent.scores.Enqueue((float)Agent.GetCoinsCollected()/sbp.GetTotalCoins());
+            Agent.scores.Enqueue((float)Agent.GetCoinsCollected()/p.coinsPerWindow);
             // Reset coins collected.
             Agent.ResetCoinsCollected(); 
-            sbp.IncrementWindowCount();
         }
     }
 

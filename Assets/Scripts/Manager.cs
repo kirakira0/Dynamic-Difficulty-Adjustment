@@ -26,8 +26,6 @@ public class Manager : MonoBehaviour
 
     private bool x = true;
     private float xpos;  
- 
-
 
     void Awake() {
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 
@@ -42,7 +40,7 @@ public class Manager : MonoBehaviour
     void Update() {
         livesText.text = "REMAINING LIVES: " + PlayerController.remainingLives;
         coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();
-        infoText.text = "Current Subpolicy: " + Agent.GetCurrentSubpolicy() +                        
+        infoText.text = "Current Subpolicy: " + Agent.GetCurrentPolicy() +                        
                         "\nAcclimated: " + Agent.GetIsAcclimated() + 
                         "\nCoins Per Current Window: " + Agent.GetCoinsPerCurrentWindow() +
                         "\nCoins Collection " + Agent.GetCoinsCollected() + 
@@ -78,9 +76,7 @@ public class Manager : MonoBehaviour
 
     public void HandleDeath() {
         if (x) {
-
-            HandleFall();
-            
+            HandleFall();           
             // StartCoroutine(Web.InsertData(Agent.totalCoinsCollected));
             x = false; 
 
