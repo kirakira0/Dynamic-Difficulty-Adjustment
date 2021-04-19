@@ -40,8 +40,7 @@ public class Manager : MonoBehaviour
     void Update() {
         livesText.text = "REMAINING LIVES: " + PlayerController.remainingLives;
         coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();
-        infoText.text = "Current Subpolicy: " + Agent.GetCurrentPolicy() +                        
-                        "\nAcclimated: " + Agent.GetIsAcclimated() + 
+        infoText.text = "\nAcclimated: " + Agent.GetIsAcclimated() + 
                         "\nCoins Per Current Window: " + Agent.GetCoinsPerCurrentWindow() +
                         "\nCoins Collection " + Agent.GetCoinsCollected() + 
                         "\nScores: " + Agent.ScoresToString() + 
@@ -52,13 +51,6 @@ public class Manager : MonoBehaviour
         // Pause game. 
         SetPaused(true);
 
-        // Add to the current policy report.
-        Generator.currentPolicyReport.AddLife(PlayerController.remainingLives); 
-        Debug.Log("ADDING LIFE");
-        Generator.currentPolicyReport.AddWindowCount(Generator.seenWindows); 
-        Debug.Log("ADD LIFE TO QUEUE");
-
-        
         // Stop coroutine.
         Generator.StopGeneration();
   
@@ -70,8 +62,6 @@ public class Manager : MonoBehaviour
         // Reset platforms. 
         PlayerController.SetPlayerPosition(new Vector3(xpos, startingPlayerPoint.position.y, 0));
         Instantiate(startingPlatform, new Vector3(xpos, startingPlayerPoint.position.y - 3, 0), Quaternion.identity);                         
-
-        // Instantiate(startingPlatform, new Vector3(PlayerController.GetPlayerTransform().x - 3, startingPlatformPoint.position.y, 0), Quaternion.identity);                         
     }
 
     public void HandleDeath() {
@@ -85,17 +75,6 @@ public class Manager : MonoBehaviour
                                 " and acclimated to " + Agent.subpolicies + " subpolicies. " +
                                 "Acclimation threshold set to: " + Agent.ACCLIMATION_THRESHOLD;
             string report = ""; 
-
-            if (Generator.policyReports.Count > 0) {
-                foreach (var policyReport in Generator.policyReports) {
-                    report += policyReport.GetReport() + "\n\n";
-                }
-            } else {
-                report += "You did not acclimate to any subpolicies with the lives allotted."; 
-            }
-            
-            reportText.text = report; 
-
 
             deathCanvas.SetActive(true); 
         } 

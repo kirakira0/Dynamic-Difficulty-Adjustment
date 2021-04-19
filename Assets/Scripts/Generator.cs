@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class Generator : MonoBehaviour
 {
+    public int MIN_NUM_WINDOWS = 2; 
+
     public Transform platformGenerationPoint;
     public GameObject shortPlatform;
     public GameObject mediumPlatform;
@@ -21,9 +23,6 @@ public class Generator : MonoBehaviour
     private PlayerController Player; 
 
     public Policy p; 
-
-    public List<PolicyReport> policyReports;
-    public PolicyReport currentPolicyReport; 
 
     public int seenWindows; 
     public List<float> acclimationScores; 
@@ -38,8 +37,6 @@ public class Generator : MonoBehaviour
         Manager = GameObject.Find("Manager").GetComponent<Manager>(); 
         Player = GameObject.Find("Player").GetComponent<PlayerController>(); 
         livesAtStart = Player.GetLives(); 
-
-        policyReports = new List<PolicyReport>(); 
     }
 
     public bool GetIsRunning() {
@@ -54,22 +51,10 @@ public class Generator : MonoBehaviour
         int policyIndex = 0; 
 
         generatorRunning = true;
-        // Add sequence to the logger.
-        
-        // LOGGER.AddPolicy(p);
-        // LOGGER.pStack.Push(p);
 
         // Repeated platform generation while player is not acclimated. 
         List<Platform> sequence = p.sequence;
         while (!Agent.GetIsAcclimated() && !Manager.GetPaused()) { 
-
-            // POLICY START!
-            // Make a new report. 
-            currentPolicyReport = new PolicyReport(p.index);
-            currentPolicyReport.AddLife(Player.remainingLives);
-
-
-
             for (int i = 0; i < sequence.Count; i++) {
                 if (!Manager.GetPaused()) {
                     GeneratePlatform(sequence[i]);
@@ -80,26 +65,27 @@ public class Generator : MonoBehaviour
             // Acclimation calculations ...
             // Get standard deviation 
             Agent.scoreSD = Agent.CalculateStandardDeviation();
-            // Keep length to 5
-            // if (Agent.scores.Count > 4) {
-            if (Agent.scores.Count > 2) {
 
-                Agent.scores.Dequeue();
-                
-                // IF ACCLIMATED.
-                
+            // Only worry about acclimation if the player has seen the minimum
+            // number of windows.
+            if (Agent.scores.Count > MIN_NUM_WINDOWS) {
+                // Only examine performance on recent windows.
+                Agent.scores.Dequeue(); 
+                // Determine if the player is acclimated.
                 if (Agent.scoreSD < Agent.ACCLIMATION_THRESHOLD) {
-                    // Fill out info in Policy Report. 
-                    currentPolicyReport.AddWindowCount(seenWindows);
-                    currentPolicyReport.AddAScores(Agent.scores); 
-                    // Add the report to the list. 
-                    policyReports.Add(currentPolicyReport);
-
-                    Debug.Log("ACCLIMATED"); 
-                    Agent.subpolicies++; 
-                    
+                    // Variables that handle acclimation checking must be 
+                    // reassigned.
+                    Agent.subpolicies++;                   
                     Agent.scores.Clear();
-                    Agent.scoreSD = 1; 
+                    Agent.scoreSD = 1;
+                    // If the round is over, add the policy to the round, add 
+                    // the round to the game and fetch a new round from the 
+                    // agent.
+                    // TODO
+
+                    // If the round is not over, only add the policy to the 
+                    // round and fetch a new round from the agent.
+                    // TODO 
 
                     policyIndex++; 
                     if (policyIndex % 3 == 0) {

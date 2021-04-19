@@ -21,9 +21,9 @@ public class Agent : MonoBehaviour
     
     private Manager Manager; 
 
-    public Policy p1;
-    public Policy p2;
-    public Policy p3;
+    public Game game;
+    public Round r0, r1, r2, r3, r4, r5, r6, r7, r8, r9;
+    public Policy p0, p1, p2, p3, p4, p5;
 
     public List<Policy> policies; 
     public Policy currentPolicy; 
@@ -33,12 +33,27 @@ public class Agent : MonoBehaviour
     {
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
 
+        p0 = new Policy(0);
         p1 = new Policy(1);
         p2 = new Policy(2);
         p3 = new Policy(3);
+        p4 = new Policy(4);
+        p5 = new Policy(5);
 
-        // currentPolicy = sbp1;
-        List<Policy> policies = new List<Policy>() { p1, p2, p3 };
+        r0 = new Round(new List<Policy>() {p0, p1, p2});
+        r1 = new Round(new List<Policy>() {p2, p3, p0});
+        r2 = new Round(new List<Policy>() {p1, p0, p5});
+        r3 = new Round(new List<Policy>() {p5, p4, p2});
+        r4 = new Round(new List<Policy>() {p0, p2, p4});
+        r5 = new Round(new List<Policy>() {p3, p1, p2});
+        r6 = new Round(new List<Policy>() {p0, p2, p5});
+        r7 = new Round(new List<Policy>() {p4, p3, p5});
+        r8 = new Round(new List<Policy>() {p4, p1, p0});
+        r9 = new Round(new List<Policy>() {p1, p3, p5});
+
+        game = new Game(new List<Round>() {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9});
+
+        List<Policy> policies = new List<Policy>() { p0, p1, p2, p3, p4, p5 };
         currentPolicy = policies[policyIndex];
 
     }
