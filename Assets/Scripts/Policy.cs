@@ -88,4 +88,8 @@ public class Policy
         }
         return result;
     }
+
+    public List<Platform> GetSequence() {
+        return this.sequence; 
+    }
 }

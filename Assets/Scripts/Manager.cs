@@ -38,8 +38,8 @@ public class Manager : MonoBehaviour
     }
 
     void Update() {
-        livesText.text = "REMAINING LIVES: " + PlayerController.remainingLives;
-        coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();
+        livesText.text = "Round: " + Agent.roundIndex + ", Policy: " + Agent.policyIndex;
+        coinText.text = "COINS COLLECTED: " + Agent.GetTotalCoinsCollected();         
         infoText.text = "\nAcclimated: " + Agent.GetIsAcclimated() + 
                         "\nCoins Per Current Window: " + Agent.GetCoinsPerCurrentWindow() +
                         "\nCoins Collection " + Agent.GetCoinsCollected() + 

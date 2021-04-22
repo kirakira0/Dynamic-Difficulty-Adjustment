@@ -21,12 +21,13 @@ public class Agent : MonoBehaviour
     
     private Manager Manager; 
 
-    public Game game;
+    public Game gameToGenerate;
     public Round r0, r1, r2, r3, r4, r5, r6, r7, r8, r9;
     public Policy p0, p1, p2, p3, p4, p5;
 
     public List<Policy> policies; 
     public Policy currentPolicy; 
+    public int roundIndex = 0;
     public int policyIndex = 0; 
 
     void Start()
@@ -51,7 +52,7 @@ public class Agent : MonoBehaviour
         r8 = new Round(new List<Policy>() {p4, p1, p0});
         r9 = new Round(new List<Policy>() {p1, p3, p5});
 
-        game = new Game(new List<Round>() {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9});
+        gameToGenerate = new Game(new List<Round>() {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9});
 
         List<Policy> policies = new List<Policy>() { p0, p1, p2, p3, p4, p5 };
         currentPolicy = policies[policyIndex];
@@ -72,7 +73,7 @@ public class Agent : MonoBehaviour
             }
 
             Manager.SetPaused(false);
-            generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentPolicy));
+            generateSequence = StartCoroutine(platformGenerator.GenerateSequence(gameToGenerate.GetPolicy(roundIndex, policyIndex)));
             // Debug.Log("AGENT STARTS COUROUTINE");
         }
 
@@ -123,7 +124,6 @@ public class Agent : MonoBehaviour
     }
 
     public float CalculateStandardDeviation() {
-        // WORK OUT THE MEAN 
         // Get sum of list. 
         float sum = 0; 
         foreach (float value in this.scores) {
@@ -148,25 +148,17 @@ public class Agent : MonoBehaviour
     /**
      * Called when player has acclimated. 
      */ 
-    public void NextPolicy() {
-                
-        policyIndex++; 
+    public Policy NextPolicy() {
 
-        if (policyIndex % 3 == 0) {
-            currentPolicy = p1; 
-        } else if (policyIndex % 3 == 1) {
-            currentPolicy = p2; 
-        } else {
-            currentPolicy = p3; 
-        }       
-
-        Debug.Log("ACCLIMATED");
-
-        StopCoroutine(generateSequence);
-        this.acclimated = false;
-        this.scores.Clear();
-        this.scoreSD = 1;   
-        generateSequence = StartCoroutine(platformGenerator.GenerateSequence(currentPolicy));
+        policyIndex++;
+        if (policyIndex >= gameToGenerate.PoliciesInRound(roundIndex)) {
+            policyIndex = 0;
+            roundIndex++;
+        }
+        if (roundIndex >= gameToGenerate.RoundsInGame()) {
+            Manager.HandleDeath();
+        }
+        return gameToGenerate.GetPolicy(roundIndex, policyIndex); 
     }
 
     /**
@@ -174,7 +166,7 @@ public class Agent : MonoBehaviour
      * encountered policies. 
     */ 
 
-    public void AddPolicy() {
+    public void RecordPolicy() {
 
     }
 }

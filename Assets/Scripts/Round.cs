@@ -10,4 +10,12 @@ public class Round
         this.policies = policies;
     }
 
+    public Policy GetPolicy(int policyIndex) {
+        return this.policies[policyIndex];
+    }
+
+    public int GetLength() {
+        return this.policies.Count;
+    }
+
 }

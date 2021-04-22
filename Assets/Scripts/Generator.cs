@@ -81,26 +81,26 @@ public class Generator : MonoBehaviour
                     // If the round is over, add the policy to the round, add 
                     // the round to the game and fetch a new round from the 
                     // agent.
-                    // TODO
+                    sequence = Agent.NextPolicy().GetSequence();
 
                     // If the round is not over, only add the policy to the 
                     // round and fetch a new round from the agent.
                     // TODO 
 
-                    policyIndex++; 
-                    if (policyIndex % 3 == 0) {
-                        // PLAYER HAS REACHED ENDGAME
-                        Debug.Log("PLAYER HAS WON"); 
-                        Manager.HandleDeath();
-                        // sequence = Agent.sqn1;
-                        // Agent.currentPolicy = Agent.p1;  
-                    } else if (policyIndex % 3 == 1) {
-                        sequence = Agent.p1.sequence; 
-                        Agent.currentPolicy = Agent.p2;  
-                    } else {
-                        sequence = Agent.p3.sequence;
-                        Agent.currentPolicy = Agent.p3;   
-                    } 
+                    // policyIndex++; 
+                    // if (policyIndex % 3 == 0) {
+                    //     // PLAYER HAS REACHED ENDGAME
+                    //     Debug.Log("PLAYER HAS WON"); 
+                    //     Manager.HandleDeath();
+                    //     // sequence = Agent.sqn1;
+                    //     // Agent.currentPolicy = Agent.p1;  
+                    // } else if (policyIndex % 3 == 1) {
+                    //     sequence = Agent.p1.sequence; 
+                    //     Agent.currentPolicy = Agent.p2;  
+                    // } else {
+                    //     sequence = Agent.p3.sequence;
+                    //     Agent.currentPolicy = Agent.p3;   
+                    // } 
 
                     seenWindows = 0; 
                     // Agent.NextPolicy();  
