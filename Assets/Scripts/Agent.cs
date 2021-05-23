@@ -9,6 +9,8 @@ public class Agent : MonoBehaviour
     public float ACCLIMATION_THRESHOLD = 0.2f; 
     public float PLATFORM_SPEED = 0.1f; 
     public Generator platformGenerator; 
+    public Web Web;
+
 
     private Coroutine generateSequence;
     public bool acclimated = false; 
@@ -31,11 +33,13 @@ public class Agent : MonoBehaviour
     public int policyIndex = 0; 
 
     public string REPORT = "";
+    Coroutine coroutine;
 
     void Start()
     {
-        REPORT += "{‘game’: [{‘round’: [";
+        REPORT += "\"{‘game’: [{‘round’: [";
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
+        Web = GameObject.Find("Web").GetComponent<Web>(); 
 
         p0 = new Policy(0);
         p1 = new Policy(1);
@@ -181,8 +185,13 @@ public class Agent : MonoBehaviour
 
 
         if (roundIndex >= gameToGenerate.RoundsInGame()) {
-            REPORT += "]}]}";
+            REPORT += "]}]}\"";
             Manager.HandleGameOver();
+
+            // Hand the report off to the WebRequest, which will post it to the database.
+            Web.WriteGame(REPORT);
+            // coroutine = Web.StartCoroutine(WriteResult(RESULT));
+
             Debug.Log("Game over");
         }
 
