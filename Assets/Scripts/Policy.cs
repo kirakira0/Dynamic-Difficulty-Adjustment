@@ -10,21 +10,20 @@ public class Policy
 
     // Variables that can only be filled after the player has completed a policy. 
     public int roundsAtStart;
-    public List<float> scores; // Get number of encountered windows with scores.Count.
+    public List<float> scores = new List<float>(); // Get number of encountered windows with scores.Count.
     public bool acclimated; // False indicates that the player died in this policy. 
 
     public Policy(int index) {
         this.index = index; 
+        this.acclimated = false;
         switch (this.index) {
             case 0:
-                Debug.Log("Case 6");
                 this.sequence = new List<Platform>() {
                     new Platform(Width.Short, Height.Middle),
                     new Platform(Width.Medium, Height.Low)
                 };  
                 break;
             case 1:
-                Debug.Log("Case 1");
                 this.sequence = new List<Platform>() {
                     new Platform(Width.Medium, Height.Low),
                     new Platform(Width.Short, Height.High),
@@ -32,7 +31,6 @@ public class Policy
                 }; 
                 break;
             case 2:
-                Debug.Log("Case 2");
                 this.sequence = new List<Platform>() {
                     new Platform(Width.Medium, Height.Low),
                     new Platform(Width.Short, Height.Low),
@@ -41,7 +39,6 @@ public class Policy
                 }; 
                 break;
             case 3:
-                Debug.Log("Case 3");
                 this.sequence = new List<Platform>() {
                     new Platform(Width.Short, Height.Middle),
                     new Platform(Width.Long, Height.Middle),
@@ -49,7 +46,6 @@ public class Policy
                 };  
                 break;
             case 4:
-                Debug.Log("Case 4");
                 this.sequence = new List<Platform>() {
                     new Platform(Width.Long, Height.Middle),
                     new Platform(Width.Short, Height.Low),
@@ -57,7 +53,6 @@ public class Policy
                 };  
                 break;
             case 5:
-                Debug.Log("Case 5");
                 this.sequence = new List<Platform>() {
                     new Platform(Width.Short, Height.High),
                     new Platform(Width.Short, Height.Middle),
@@ -66,7 +61,6 @@ public class Policy
                 };  
                 break;
             default:
-                Debug.Log("Default case");
                 break;
         }
         this.coinsPerWindow = this.calculateCoinsPerWindow();
@@ -92,4 +86,9 @@ public class Policy
     public List<Platform> GetSequence() {
         return this.sequence; 
     }
+
+    public override string ToString(){
+        return "{'policy': {'index': " + this.index + ", 'scores': " + string.Join( ",", this.scores) + ", 'acclimated': " + this.acclimated + "}}";
+    }  
+
 }

@@ -47,7 +47,10 @@ public class Manager : MonoBehaviour
                         "\nScore SD: " + Agent.scoreSD;
     }
 
-    public void HandleFall() {  
+    public void HandleFall() { 
+        Generator.p.acclimated = false;
+        Agent.NextPolicy(Generator.p);
+
         // Pause game. 
         SetPaused(true);
 
@@ -64,20 +67,12 @@ public class Manager : MonoBehaviour
         Instantiate(startingPlatform, new Vector3(xpos, startingPlayerPoint.position.y - 3, 0), Quaternion.identity);                         
     }
 
-    public void HandleDeath() {
-        if (x) {
-            HandleFall();           
-            // StartCoroutine(Web.InsertData(Agent.totalCoinsCollected));
-            x = false; 
-
-            // Show summary. 
-            summaryText.text = "You collected a total of " + Agent.totalCoinsCollected + 
-                                " and acclimated to " + Agent.subpolicies + " subpolicies. " +
-                                "Acclimation threshold set to: " + Agent.ACCLIMATION_THRESHOLD;
-            string report = ""; 
-
-            deathCanvas.SetActive(true); 
-        } 
+    public void HandleGameOver() {
+            // HandleFall();
+            // x = false;
+            StartCoroutine(Web.WriteResults());
+            summaryText.text = "Game complete";
+            deathCanvas.SetActive(true);         
     }
 
     public bool GetPaused() {

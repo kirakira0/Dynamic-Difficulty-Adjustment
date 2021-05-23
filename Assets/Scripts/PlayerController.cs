@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
             if (remainingLives > 0) {
                 Manager.HandleFall(); 
             } else {
-                Manager.HandleDeath(); 
+                // Manager.HandleDeath(); 
             }
         }
     }

@@ -30,8 +30,11 @@ public class Agent : MonoBehaviour
     public int roundIndex = 0;
     public int policyIndex = 0; 
 
+    public string REPORT = "";
+
     void Start()
     {
+        REPORT += "{‘game’: [{‘round’: [";
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
 
         p0 = new Policy(0);
@@ -52,7 +55,8 @@ public class Agent : MonoBehaviour
         r8 = new Round(new List<Policy>() {p4, p1, p0});
         r9 = new Round(new List<Policy>() {p1, p3, p5});
 
-        gameToGenerate = new Game(new List<Round>() {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9});
+        // gameToGenerate = new Game(new List<Round>() {r0, r1, r2, r3, r4, r5, r6, r7, r8, r9});
+        gameToGenerate = new Game(new List<Round>() {r0, r1, r2});
 
         List<Policy> policies = new List<Policy>() { p0, p1, p2, p3, p4, p5 };
         currentPolicy = policies[policyIndex];
@@ -146,18 +150,44 @@ public class Agent : MonoBehaviour
     }
 
     /**
-     * Called when player has acclimated. 
+     * Called when player has acclimated/fallen. 
      */ 
-    public Policy NextPolicy() {
+    public Policy NextPolicy(Policy currentPolicy) {
 
-        policyIndex++;
-        if (policyIndex >= gameToGenerate.PoliciesInRound(roundIndex)) {
+        // Add current policy to report 
+        REPORT += currentPolicy.ToString();
+
+        // IF NO DEATH ...
+        if (currentPolicy.acclimated) {
+            // If no death, make new policy 
+            policyIndex++;
+            // If reached end of round ...
+            if (policyIndex >= gameToGenerate.PoliciesInRound(roundIndex)) {
+                REPORT += "]}, {‘round’: [";
+
+                policyIndex = 0;
+                roundIndex++;
+            }
+            else {
+                REPORT += ", ";
+
+            }
+        // IF DEATH ...
+        } else {
+            REPORT += "]}, {‘round’: [";
             policyIndex = 0;
-            roundIndex++;
+            roundIndex++;          
         }
+
+
         if (roundIndex >= gameToGenerate.RoundsInGame()) {
-            Manager.HandleDeath();
+            REPORT += "]}]}";
+            Manager.HandleGameOver();
+            Debug.Log("Game over");
         }
+
+        Debug.Log(REPORT);
+
         return gameToGenerate.GetPolicy(roundIndex, policyIndex); 
     }
 

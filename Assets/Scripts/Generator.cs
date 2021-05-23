@@ -73,6 +73,8 @@ public class Generator : MonoBehaviour
                 Agent.scores.Dequeue(); 
                 // Determine if the player is acclimated.
                 if (Agent.scoreSD < Agent.ACCLIMATION_THRESHOLD) {
+                    // Update the policy.
+                    p.acclimated = true;
                     // Variables that handle acclimation checking must be 
                     // reassigned.
                     Agent.subpolicies++;                   
@@ -81,33 +83,18 @@ public class Generator : MonoBehaviour
                     // If the round is over, add the policy to the round, add 
                     // the round to the game and fetch a new round from the 
                     // agent.
-                    sequence = Agent.NextPolicy().GetSequence();
+                    p = Agent.NextPolicy(p);
 
-                    // If the round is not over, only add the policy to the 
-                    // round and fetch a new round from the agent.
-                    // TODO 
-
-                    // policyIndex++; 
-                    // if (policyIndex % 3 == 0) {
-                    //     // PLAYER HAS REACHED ENDGAME
-                    //     Debug.Log("PLAYER HAS WON"); 
-                    //     Manager.HandleDeath();
-                    //     // sequence = Agent.sqn1;
-                    //     // Agent.currentPolicy = Agent.p1;  
-                    // } else if (policyIndex % 3 == 1) {
-                    //     sequence = Agent.p1.sequence; 
-                    //     Agent.currentPolicy = Agent.p2;  
-                    // } else {
-                    //     sequence = Agent.p3.sequence;
-                    //     Agent.currentPolicy = Agent.p3;   
-                    // } 
+                    sequence = p.GetSequence();
 
                     seenWindows = 0; 
                     // Agent.NextPolicy();  
                 } 
             } 
-            // Add new value
-            Agent.scores.Enqueue((float)Agent.GetCoinsCollected()/p.coinsPerWindow);
+            // Add score to agent scores and to policy scores. 
+            float scoreToAdd = (float)Agent.GetCoinsCollected()/p.coinsPerWindow;
+            Agent.scores.Enqueue(scoreToAdd);
+            p.scores.Add(scoreToAdd);
             // Reset coins collected.
             Agent.ResetCoinsCollected(); 
         }

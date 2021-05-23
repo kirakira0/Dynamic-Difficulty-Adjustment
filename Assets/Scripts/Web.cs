@@ -9,8 +9,16 @@ public class Web : MonoBehaviour
     string registerPlayerURL = "http://localhost:8080/DDA/RegisterUser.php";
     string addPlayerURL = "http://localhost:8080/DDA/AddPlayer.php";
     string insertScoreURL = "http://localhost:8080/DDA/InsertScore.php";
-
     string insertDataURL = "http://localhost:8080/DDA/InsertData.php";
+
+    Coroutine coroutine;
+    string writeResultsURL = "http://localhost:80/dda/WriteResults.php";
+
+    void Start() {
+        coroutine = StartCoroutine(WriteResults());
+
+    }
+
 
     public IEnumerator GetData(string URL) {
         using (UnityWebRequest www = UnityWebRequest.Get(URL)) {
@@ -68,11 +76,12 @@ public class Web : MonoBehaviour
         }
     }
 
-    public IEnumerator InsertScore() {
+    public IEnumerator WriteResults() {
         WWWForm form = new WWWForm();
         // form.AddField("coins", 0);
         
-        using (UnityWebRequest www = UnityWebRequest.Post(insertScoreURL, form)) {
+        using (UnityWebRequest www = UnityWebRequest.Post(writeResultsURL, form)) {
+
             yield return www.SendWebRequest();
             if (www.isNetworkError || www.isHttpError) {
                 Debug.Log(www.error);
@@ -86,3 +95,5 @@ public class Web : MonoBehaviour
         }
     }     
 }
+
+
