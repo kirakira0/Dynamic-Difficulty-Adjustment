@@ -70,7 +70,7 @@ public class Manager : MonoBehaviour
     public void HandleGameOver() {
             // HandleFall();
             // x = false;
-            // StartCoroutine(Web.WriteResult(RESULT));
+            StartCoroutine(Web.WriteResults());
             summaryText.text = "Game complete";
             deathCanvas.SetActive(true);         
     }

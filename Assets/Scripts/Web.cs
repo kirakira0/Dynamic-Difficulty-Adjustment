@@ -14,29 +14,10 @@ public class Web : MonoBehaviour
     Coroutine coroutine;
     string writeResultsURL = "http://localhost:80/dda/WriteResults.php";
 
-    public void WriteGame(string game) {
-        coroutine = StartCoroutine(WriteResult(game));
+    void Start() {
+        coroutine = StartCoroutine(WriteResults());
 
     }
-
-    public IEnumerator WriteResult(string game) {
-        WWWForm form = new WWWForm();
-        form.AddField("game", game);
-        
-        using (UnityWebRequest www = UnityWebRequest.Post(writeResultsURL, form)) {
-
-            yield return www.SendWebRequest();
-            if (www.isNetworkError || www.isHttpError) {
-                Debug.Log(www.error);
-            } else {
-                // Show results as text.
-                 Debug.Log(www.downloadHandler.text);
-                // Debug.Log(www.downloadHandler.insert_id);
-                // Or retrieve as binary data
-                byte[] results = www.downloadHandler.data;  
-            }
-        }
-    } 
 
 
     public IEnumerator GetData(string URL) {
@@ -93,7 +74,26 @@ public class Web : MonoBehaviour
                 byte[] results = www.downloadHandler.data;  
             }
         }
-    }    
+    }
+
+    public IEnumerator WriteResults() {
+        WWWForm form = new WWWForm();
+        // form.AddField("coins", 0);
+        
+        using (UnityWebRequest www = UnityWebRequest.Post(writeResultsURL, form)) {
+
+            yield return www.SendWebRequest();
+            if (www.isNetworkError || www.isHttpError) {
+                Debug.Log(www.error);
+            } else {
+                // Show results as text.
+                 Debug.Log(www.downloadHandler.text);
+                // Debug.Log(www.downloadHandler.insert_id);
+                // Or retrieve as binary data
+                byte[] results = www.downloadHandler.data;  
+            }
+        }
+    }     
 }
 
 
