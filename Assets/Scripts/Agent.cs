@@ -19,7 +19,8 @@ public class Agent : MonoBehaviour
     public int subpolicies = 0; 
     public Subpolicy[] allPolicies; 
     
-    private Manager Manager; 
+    private Manager Manager;
+    private Web Web; 
 
     public Game gameToGenerate;
     public Round r0, r1, r2, r3, r4, r5, r6, r7, r8, r9;
@@ -34,8 +35,9 @@ public class Agent : MonoBehaviour
 
     void Start()
     {
-        REPORT += "{‘game’: [{‘round’: [";
+        REPORT += "{\"game\": [{\"round\": [";
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
+        Web = GameObject.Find("Web").GetComponent<Web>();
 
         p0 = new Policy(0);
         p1 = new Policy(1);
@@ -163,7 +165,7 @@ public class Agent : MonoBehaviour
             policyIndex++;
             // If reached end of round ...
             if (policyIndex >= gameToGenerate.PoliciesInRound(roundIndex)) {
-                REPORT += "]}, {‘round’: [";
+                REPORT += "]}, {\"round\": [";
 
                 policyIndex = 0;
                 roundIndex++;
@@ -174,29 +176,22 @@ public class Agent : MonoBehaviour
             }
         // IF DEATH ...
         } else {
-            REPORT += "]}, {‘round’: [";
+            REPORT += "]}, {\"round\": [";
             policyIndex = 0;
             roundIndex++;          
         }
 
 
         if (roundIndex >= gameToGenerate.RoundsInGame()) {
-            REPORT += "]}]}";
+            REPORT = REPORT.Substring(0, REPORT.Length - 13);
+            REPORT += "]}";
             Manager.HandleGameOver();
-            Debug.Log("Game over");
+            Debug.Log("Game over");   
+            Web.WriteData(REPORT);
         }
 
         Debug.Log(REPORT);
 
         return gameToGenerate.GetPolicy(roundIndex, policyIndex); 
-    }
-
-    /**
-     * Once the player has acclimated OR IF THE PLAYER DIES, add the supolicy to the list of 
-     * encountered policies. 
-    */ 
-
-    public void RecordPolicy() {
-
     }
 }

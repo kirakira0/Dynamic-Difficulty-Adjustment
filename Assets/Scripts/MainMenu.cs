@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour 
 {
-    public string sceneName = "EndlessRunner";
+    // public string sceneName = "EndlessRunner";
 
-	public void PlayGame()
+	public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }

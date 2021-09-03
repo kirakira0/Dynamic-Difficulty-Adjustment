@@ -70,8 +70,9 @@ public class Manager : MonoBehaviour
     public void HandleGameOver() {
             // HandleFall();
             // x = false;
-            StartCoroutine(Web.WriteResults());
-            summaryText.text = "Game complete";
+            // StartCoroutine(Web.WriteResults());
+            summaryText.text = "You completed " + Agent.roundIndex + " rounds and collected a total of " + Agent.GetTotalCoinsCollected() + " coins.";
+            // summaryText.text = Agent.REPORT;
             deathCanvas.SetActive(true);         
     }
 
