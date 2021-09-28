@@ -17,7 +17,7 @@ public class PlatformMovement : MonoBehaviour
         if (Manager.GetPaused()) {
             transform.position = new Vector3(0, transform.position.y, 0);
         } else {
-            transform.position = new Vector3(transform.position.x - Agent.PLATFORM_SPEED, transform.position.y, 0);
+            transform.position = new Vector3(transform.position.x - (Agent.PLATFORM_SPEED * Time.deltaTime), transform.position.y, 0);
         }        
     }
 }

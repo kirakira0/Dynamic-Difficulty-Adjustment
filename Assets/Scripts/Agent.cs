@@ -7,7 +7,7 @@ public class Agent : MonoBehaviour
 {
 
     public float ACCLIMATION_THRESHOLD = 0.2f; 
-    public float PLATFORM_SPEED = 0.1f; 
+    public float PLATFORM_SPEED = 0.9f; 
     public Generator platformGenerator; 
 
     private Coroutine generateSequence;
