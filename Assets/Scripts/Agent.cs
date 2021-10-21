@@ -20,7 +20,7 @@ public class Agent : MonoBehaviour
     public Subpolicy[] allPolicies; 
     
     private Manager Manager;
-    private Web Web; 
+    private FirebaseHandler FirebaseHandler; 
 
     public Game gameToGenerate;
     public Round r0, r1, r2, r3, r4, r5, r6, r7, r8, r9;
@@ -37,7 +37,7 @@ public class Agent : MonoBehaviour
     {
         REPORT += "{\"game\": [{\"round\": [";
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
-        Web = GameObject.Find("Web").GetComponent<Web>();
+        FirebaseHandler = GameObject.Find("FirebaseHandler").GetComponent<FirebaseHandler>(); 
 
         p0 = new Policy(0);
         p1 = new Policy(1);
@@ -186,8 +186,9 @@ public class Agent : MonoBehaviour
             REPORT = REPORT.Substring(0, REPORT.Length - 13);
             REPORT += "]}";
             Manager.HandleGameOver();
-            Debug.Log("Game over");   
-            Web.WriteData(REPORT);
+            FirebaseHandler.PostToDatabase(REPORT); 
+            Debug.Log("Game over");  
+            // Web.WriteData(REPORT);
         }
 
         Debug.Log(REPORT);

@@ -22,7 +22,7 @@ public class Manager : MonoBehaviour
     private PlayerController PlayerController;
     private Generator Generator;      
     private Agent Agent; 
-    private Web Web;
+    // private FirebaseHandler FirebaseHandler;
 
     private bool x = true;
     private float xpos;  
@@ -32,7 +32,7 @@ public class Manager : MonoBehaviour
         PlayerController = GameObject.Find("Player").GetComponent<PlayerController>();
         Generator = GameObject.Find("PlatformGenerator").GetComponent<Generator>(); 
         Agent = GameObject.Find("Agent").GetComponent<Agent>(); 
-        Web = GameObject.Find("Web").GetComponent<Web>(); 
+        // FirebaseHandler = GameObject.Find("FirebaseHandler").GetComponent<FirebaseHandler>(); 
         // deathCanvas.SetActive(false);
         xpos = PlayerController.GetPlayerTransform().x; 
     }

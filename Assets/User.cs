@@ -8,7 +8,7 @@ public class User  {
     public int userScore;
 
     public User() {
-        userName = PlayerScores.playerName;
-        userScore = PlayerScores.playerScore;
+        // userName = PlayerScores.playerName;
+        // userScore = PlayerScores.playerScore;
     }
 }
