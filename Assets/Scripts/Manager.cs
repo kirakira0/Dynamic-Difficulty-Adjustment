@@ -33,8 +33,8 @@ public class Manager : MonoBehaviour
     void Awake() {
         PlayerData = new PlayerData(Random.Range(0, 10001)); 
         idAndInstructionsText.text = "Thank you for participating in our research trial. Your player id is: " + PlayerData.GetPlayerId() +
-                                      ". Please save this number as it will be asked about in the player feedback form.\n\n The game that you are about to play is a platformer. To play, press the [ENTER] key or [SPACE] key to jump. You may “double jump”, or press the jump keys again while in the air to jump a second time. The longer a jump key is held, the higher the character will jump. You may wish to leverage this scaling jump force when you encounter large gaps between platforms or small gaps that require short jumps. The objective is to jump from platform to platform and collect as many coins as possible. Falling between the platforms will count as a death. The game will conclude after a certain number of deaths or after the completion of ten rounds." + 
-                                      "\n\nTo start moving, press one of the two jump keys. ";
+                                      ". Please save this number as it will be asked about in the player feedback form.\n\n The game that you are about to play is a platformer. To play, press the [SPACE] key to jump. You may “double jump”, or press the jump key again while in the air to jump a second time. The longer [SPACE] is held, the higher the character will jump. You may wish to leverage this scaling jump force when you encounter large gaps between platforms or small gaps that require short jumps. The objective is to jump from platform to platform and collect as many coins as possible. Falling between the platforms will count as a death. The game will conclude after a certain number of deaths or after the completion of ten rounds." + 
+                                      "\n\nTo start moving, press the Continue button to dismiss this window. Then press [SPACE]. ";
 
 
         LOGGER = GameObject.Find("Logger").GetComponent<Logger>(); 

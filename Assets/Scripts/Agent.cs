@@ -71,7 +71,7 @@ public class Agent : MonoBehaviour
             // StopGeneration();
         }
 
-        if(Input.GetKeyDown(KeyCode.Return) && Manager.GetPaused()) {
+        if(Input.GetKeyDown(KeyCode.Space) && Manager.GetPaused()) {
             // if cor running 
                 // stop 
             if (platformGenerator.GetIsRunning()) {
