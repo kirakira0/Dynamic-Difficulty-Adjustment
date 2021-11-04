@@ -31,7 +31,7 @@ public class SliderSetter : MonoBehaviour
             Agent.PLATFORM_SPEED = slider.value;  
         } else if (this.name == "MaxJump") {
             myText.text = "JUMP FORCE: " +  slider.value;
-            Player.maxJumpValue = slider.value; 
+            // Player.maxJumpValue = slider.value; 
         }
     }
 }

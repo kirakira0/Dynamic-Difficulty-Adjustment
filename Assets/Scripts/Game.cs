@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * @author Kira Toal
+ * @updated October 24, 2021
+ */
 public class Game
 {
     public List<Round> rounds;

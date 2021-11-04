@@ -4,50 +4,62 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float jumpForce = 20f; 
-    public float maxJumpValue = 10f; 
-    public float jumpSpeed = 0.01f;
-    public LayerMask whatIsGround;
-    public float groundedRadius;
-    public int remainingLives = 10; 
+    public float jumpForce = 10f;
+    bool isGrounded = false; 
+    public Transform isGroundedChecker; 
+    public float checkGroundRadius; 
+    public LayerMask groundLayer;
+    public float fallMultiplier = 2.5f; 
+    public float lowJumpMultiplier = 2f;
+    public float rememberGroundedFor; 
+    float lastTimeGrounded;
+    public int defaultAdditionalJumps = 1; 
+    int additionalJumps;
 
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rb;
     private Transform groundCheck;
     private Manager Manager; 
 
-    private bool grounded;
-    private int consecutiveJumps = 0;
+    public int remainingLives = 10; 
 
     void Awake() {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("Player/GroundCheck").GetComponent<Transform>();
         Manager = GameObject.Find("Manager").GetComponent<Manager>();
     }
 
-	void Update() {
-        // Check for collision with ground. 
-        grounded = Physics2D.OverlapCircle(groundCheck.position, groundedRadius, whatIsGround);
-        // If the player touches the ground, reset their ability to jump.
-        if (grounded) {
-            consecutiveJumps = 0; 
+    void Jump() {
+        if (Input.GetKeyDown(KeyCode.Space) && (isGrounded || Time.time - lastTimeGrounded <= rememberGroundedFor || additionalJumps > 0)) {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            additionalJumps--;
         }
-   
-        if(Input.GetKeyDown(KeyCode.Space) && consecutiveJumps < 2 && !Manager.GetPaused()) {
-            // consecutiveJumps++; 
+    }
 
-            rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0); 
-            
-            while (rigidbody.velocity.y < maxJumpValue) {
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, rigidbody.velocity.y + jumpSpeed);
+    void BetterJump() {
+        if (rb.velocity.y < 0) {
+            rb.velocity += Vector2.up * Physics2D.gravity * (fallMultiplier - 1) * Time.deltaTime;
+        } else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space)) {
+            rb.velocity += Vector2.up * Physics2D.gravity * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }   
+    }
+
+    void CheckIfGrounded() {
+        Collider2D colliders = Physics2D.OverlapCircle(isGroundedChecker.position, checkGroundRadius, groundLayer);
+        if (colliders != null) {
+            isGrounded = true;
+            additionalJumps = defaultAdditionalJumps;
+        } else {
+            if (isGrounded) {
+                lastTimeGrounded = Time.time;
             }
+            isGrounded = false;
         }
+    }
 
-        // Stop moving upwards on key jumps: lets player make shorter jumps. 
-        if(Input.GetKeyUp(KeyCode.Space) && consecutiveJumps < 2 && !Manager.GetPaused()) {
-            rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0); 
-                        consecutiveJumps++; 
-
-        }
+	void Update() {
+        Jump();
+        BetterJump();
+        CheckIfGrounded();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -64,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetPlayerPosition(Vector3 position) {this.transform.position = position;}
 
-    public void SetPlayerVelocity(Vector3 velocity) {this.rigidbody.velocity = velocity;}
+    public void SetPlayerVelocity(Vector3 velocity) {this.rb.velocity = velocity;}
 
     public Vector3 GetPlayerTransform() {return this.transform.position;}
 
