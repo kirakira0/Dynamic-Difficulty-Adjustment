@@ -102,7 +102,6 @@ public class Generator : MonoBehaviour
 
     public void GeneratePlatform(Platform platform) {
         GameObject type; 
-        // Debug.Log(platform.getWidth());
         if (platform.getWidth() == Width.Short) { type = shortPlatform; }
         else if (platform.getWidth() == Width.Medium) { type = mediumPlatform; }
         else { type = longPlatform; }
